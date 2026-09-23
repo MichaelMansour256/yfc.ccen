@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+:root {
+  /* Fallback copies of src/config/theme.ts — the live values are injected
+     from the theme config as an inline <style> tag by the root layouts.
+     Keep these in sync to avoid a first-paint flash of outdated colors. */
+  --blue-dark: #0f1f5c;
+  --blue-primary: #1a3a8f;
+  --blue-mid: #1e40af;
+  --blue-accent: #3b82f6;
+  --blue-light: #93c5fd;
+  --white: #ffffff;
+  --gradient-mid: #1a4db5;
+  --gradient-dark: #0f1f5c;
+  --gradient-deeper: #060d2e;
+}
+
+@theme inline {
+  --color-blue-dark: var(--blue-dark);
+  --color-blue-primary: var(--blue-primary);
+  --color-blue-mid: var(--blue-mid);
+  --color-blue-accent: var(--blue-accent);
+  --color-blue-light: var(--blue-light);
+}
+
+html[lang="ar"],
+html[lang="ar"] body {
+  font-family: "Cairo", sans-serif;
+  direction: rtl;
+}
+
+html[lang="en"],
+html[lang="en"] body {
+  font-family: "Inter", sans-serif;
+  direction: ltr;
+}
+
+body {
+  background: var(--blue-dark);
+  color: var(--white);
+  min-height: 100dvh;
+}
+
+.pb-safe {
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+}
+
+/* Page background gradients — colors come from src/config/theme.ts. */
+.hero-gradient {
+  background: radial-gradient(ellipse at 50% 20%, var(--gradient-mid) 0%, var(--gradient-dark) 55%, var(--gradient-deeper) 100%);
+}
+.page-gradient {
+  background: radial-gradient(ellipse at 50% 0%, var(--gradient-mid) 0%, var(--gradient-dark) 70%);
+}
+.page-gradient-high {
+  background: radial-gradient(ellipse at 50% 30%, var(--gradient-mid) 0%, var(--gradient-dark) 70%);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 0.8; transform: scale(1.08); }
+}
+.animate-fade-up {
+  animation: fadeUp 0.7s ease both;
+}
+.animate-fade-up-delay {
+  animation: fadeUp 0.7s ease 0.15s both;
+}
+.animate-fade-up-delay-2 {
+  animation: fadeUp 0.7s ease 0.3s both;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* PWA install banner (src/components/InstallBanner.tsx) — slides up from the
+   bottom edge; the component only mounts when it should be visible, so the
+   keyframes' `both` fill-mode starts it at opacity 0 (no flash). */
+@keyframes install-banner-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@keyframes install-banner-out {
+  from { opacity: 1; transform: translateY(0)    scale(1); }
+  to   { opacity: 0; transform: translateY(16px) scale(0.98); }
+}
+.install-banner-enter {
+  animation: install-banner-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.install-banner-exit {
+  animation: install-banner-out 0.25s ease-in both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .install-banner-enter,
+  .install-banner-exit {
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+  }
+}
+
+/* ── Printable QR sheet (src/app/admin/attendance/members/qr-sheet) ─────────
+   Screen colours are dark; paper is white. These rules make the sheet printable
+   without the servant having to enable "print backgrounds" in the browser. */
+@media print {
+  body {
+    background: #fff !important;
+  }
+  .page-gradient,
+  .page-gradient-high,
+  .hero-gradient {
+    background: #fff !important;
+  }
+  .print-sheet {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8mm;
+  }
+  .print-sheet,
+  .print-sheet * {
+    color: #111 !important;
+  }
+  .qr-card {
+    background: #fff !important;
+    border: 1px solid #666 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .print-sheet img {
+    width: 42mm;
+    height: 42mm;
+  }
+}

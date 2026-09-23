@@ -1,0 +1,76 @@
+{
+  "nav": {
+    "home": "Home",
+    "events": "Events",
+    "bible": "Bible",
+    "games": "Games",
+    "more": "More"
+  },
+  "events": {
+    "title": "Events",
+    "upcoming": "Upcoming",
+    "past": "Past Events"
+  },
+  "bible": {
+    "title": "Bible",
+    "verseOfWeek": "Verse of the Week",
+    "studies": "Studies",
+    "resources": "Resources"
+  },
+  "games": {
+    "title": "Games",
+    "holyWordle": "HolyWordle",
+    "crossword": "Crossword",
+    "whoAmI": "Who Am I?",
+    "emojiBible": "Emoji Bible"
+  },
+  "more": {
+    "title": "More",
+    "about": "About Us",
+    "gallery": "Gallery",
+    "servants": "Servants",
+    "prayerWall": "Prayer Wall",
+    "contact": "Contact"
+  },
+  "content": {
+    "searchPlaceholder": "Search by title…",
+    "allCategories": "All categories",
+    "allTypes": "All types",
+    "reference": "Bible reference",
+    "anyBook": "All books",
+    "chapter": "Chapter",
+    "clearReference": "Clear reference",
+    "relatedStudies": "Related Studies",
+    "relatedResources": "Related Resources",
+    "relatedStudy": "Related study",
+    "openInNewTab": "Opens in a new tab",
+    "emptyStudies": "No studies published yet",
+    "emptyResources": "No resources published yet",
+    "noResults": "No matching results",
+    "clearFilters": "Clear all filters",
+    "loading": "Loading…",
+    "error": "Couldn't load the content",
+    "retry": "Retry"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "all": "All",
+    "unread": "Unread",
+    "read": "Read",
+    "markAllRead": "Mark all as read",
+    "empty": "No notifications yet",
+    "emptyFiltered": "No notifications in this filter",
+    "error": "Couldn't load notifications. Check your connection and try again.",
+    "retry": "Retry",
+    "loadMore": "Load more"
+  },
+  "install": {
+    "dialogLabel": "Install the E3dady app",
+    "title": "Install the E3dady app",
+    "description": "Enjoy E3dady as a standalone app from your home screen.",
+    "install": "Install",
+    "installAria": "Install the E3dady app on this device",
+    "later": "Later",
+    "laterAria": "Hide the install banner and remind me later"
+  }
+}

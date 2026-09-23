@@ -1,0 +1,37 @@
+{
+  "name": "e3dady.ccen",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "generate-icons": "node scripts/generate-pwa-icons.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.113.0",
+    "cloudinary": "^2.11.0",
+    "exceljs": "^4.4.0",
+    "jsqr": "^1.4.0",
+    "next": "16.3.4",
+    "next-intl": "^4.14.2",
+    "next-pwa": "^5.6.0",
+    "qrcode": "^1.5.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-dropzone": "^20.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.4",
+    "sharp": "^0.35.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
