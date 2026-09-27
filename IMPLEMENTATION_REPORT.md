@@ -83,7 +83,7 @@ The QR Code Attendance System has been fully implemented for the `yfc.ccen` proj
 
 No new variables required. Uses existing:
 - `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_ANON_KEY`
 - `ADMIN_PASSWORD`
 
 ## Testing

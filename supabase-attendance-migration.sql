@@ -24,12 +24,14 @@
 --                 (see "SECURITY" below) and bypasses RLS by design.
 --
 -- SECURITY
---   This project keeps its Supabase key in NEXT_PUBLIC_SUPABASE_ANON_KEY but the
---   value is a *secret* key (sb_secret_…) and it is only ever imported by server
---   code (src/lib/supabase.ts → API routes). It must never be shipped to the
---   browser. If you ever replace it with a publishable key (sb_publishable_…),
---   the admin APIs stop working — move the secret to a server-only env var
---   (e.g. SUPABASE_SECRET_KEY) first and create dedicated policies.
+--   This project keeps its Supabase key in the server-only SUPABASE_ANON_KEY env
+--   var — deliberately NOT NEXT_PUBLIC_-prefixed, because that prefix inlines the
+--   value into the client bundle. The value is a *secret* key (sb_secret_…) and
+--   it is only ever imported by server code (src/lib/supabase.ts → API routes).
+--   It must never be shipped to the browser. If you ever replace it with a
+--   publishable key (sb_publishable_…), the admin APIs stop working — move the
+--   secret to a server-only env var (e.g. SUPABASE_SECRET_KEY) first and create
+--   dedicated policies.
 --
 -- VERIFY AFTER RUNNING
 --   select 'members' as t, count(*) from public.members

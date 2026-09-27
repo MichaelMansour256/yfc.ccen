@@ -191,7 +191,7 @@ Copy `.env.example` to `.env.local`. Never commit real values.
 | Variable | Scope | Purpose |
 | -------- | ----- | ------- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Public | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public | Supabase publishable key |
+| `SUPABASE_ANON_KEY` | **Secret** | Server-only Supabase fallback key — no `NEXT_PUBLIC_` prefix on purpose, so it is never inlined into the client bundle |
 | `SUPABASE_SERVICE_ROLE_KEY` | **Secret** | Server-only key; required for staff-only attendance and content writes |
 | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Public | Cloudinary cloud name |
 | `CLOUDINARY_API_KEY` | **Secret** | Cloudinary uploads and folder management |

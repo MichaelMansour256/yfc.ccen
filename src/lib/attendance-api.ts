@@ -90,7 +90,7 @@ export function databaseError(scope: string, error: unknown): NextResponse {
     return NextResponse.json(
       {
         error:
-          "مفتاح Supabase غير صالح — تحقّق من قيمة SUPABASE_SERVICE_ROLE_KEY و NEXT_PUBLIC_SUPABASE_ANON_KEY في إعدادات البيئة.",
+          "مفتاح Supabase غير صالح — تحقّق من قيمة SUPABASE_SERVICE_ROLE_KEY و SUPABASE_ANON_KEY في إعدادات البيئة.",
         code: "misconfigured_key",
       },
       { status: 503 }
