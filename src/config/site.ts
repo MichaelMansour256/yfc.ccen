@@ -43,11 +43,10 @@ export const siteConfig = {
 
   /** Social links (rendered on the home hero and the contact page). */
   social: [
-    { name: "Facebook", url: "https://www.facebook.com/youth.for.christ" },
-    { name: "Instagram", url: "https://www.instagram.com/youth.for.christ" },
-    { name: "TikTok", url: "https://www.tiktok.com/@youth.for.christ" },
-    { name: "YouTube", url: "https://www.youtube.com/@youthforchrist" },
-    { name: "Linktree", url: "https://linktr.ee/youth.for.christ" },
+    { name: "Facebook", url: "https://www.facebook.com/profile.php?id=61565610140238" },
+    { name: "Instagram", url: "https://www.instagram.com/yfc_meeting" },
+    { name: "SoundCloud", url: "https://soundcloud.com/youth-christ-church" }
+    //{ name: "Linktree", url: "https://linktr.ee/youth.for.christ" },
   ] satisfies SocialLink[],
 
   /** Branding assets under /public — replace these files for a new meeting. */
