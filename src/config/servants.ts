@@ -24,12 +24,14 @@ export const servantsTitleAr = "الخدام";
 export const servants: Servant[] = [
   
   { file: "ehab youssef.jpg", name: "Ehab Youssef", nameAr: "إيهاب يوسف" },
-  { file: "Reham adly.jpg", name: "Reham adly", nameAr: "ريهام عدلي" },
-  { file: "mariam samy.jpg", name: "mariam samy", nameAr: "مريم سامي" },
-  { file: "jozef rizk.jpg", name: "jozef rizk", nameAr: "جوزيف رزق" },
-  { file: "ramez malak.jpg", name: "ramez malak", nameAr: "رامز ملاك" },
-  { file: "essam raaft.jpg", name: "essam raaft", nameAr: "عصام رأفت" },
-  { file: "raaft shoukry.jpg", name: "raaft shoukry", nameAr: "رأفت شكري" },
-  { file: "amani jad.jpg", name: "amani jad", nameAr: "أماني جاد" },
-  { file: "merna rezk.jpg", name: "merna rezk", nameAr: "ميرنا رزق" }
+  { file: "samira basher.jpg", name: "Samira Basher", nameAr: "سميرة باشر" },
+  { file: "amani gad.jpg", name: "Amani Gad", nameAr: "أماني جاد" },
+  { file: "reham adly.jpg", name: "Reham Adly", nameAr: "ريهام عدلي" },
+  { file: "mariam samy.jpg", name: "Mariam Samy", nameAr: "مريم سامي" },
+  { file: "essam raafat.jpg", name: "Essam Raafat", nameAr: "عصام رأفت" },
+  { file: "raafat shoukry.jpg", name: "Raafat Shoukry", nameAr: "رأفت شكري" },
+  { file: "merna rezk.jpg", name: "Merna Rezk", nameAr: "ميرنا رزق" },
+  { file: "jozef rizk.jpg", name: "Jozef Rizk", nameAr: "جوزيف رزق" },
+  { file: "ramez malak.jpg", name: "Ramez Malak", nameAr: "رامز ملاك" }
+
 ];
