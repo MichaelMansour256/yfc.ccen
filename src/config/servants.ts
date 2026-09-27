@@ -25,13 +25,13 @@ export const servants: Servant[] = [
   
   { file: "ehab youssef.jpg", name: "Ehab Youssef", nameAr: "إيهاب يوسف" },
   { file: "samira boshra.jpg", name: "Samira Boshra", nameAr: "سميرة بشرى" },
-  { file: "amani gad.jpg", name: "Amani Gad", nameAr: "أماني جاد" },
   { file: "reham adly.jpg", name: "Reham Adly", nameAr: "ريهام عدلي" },
+  { file: "amani gad.jpg", name: "Amani Gad", nameAr: "أماني جاد" },
   { file: "mariam samy.jpg", name: "Mariam Samy", nameAr: "مريم سامي" },
   { file: "essam raafat.jpg", name: "Essam Raafat", nameAr: "عصام رأفت" },
   { file: "raafat shoukry.jpg", name: "Raafat Shoukry", nameAr: "رأفت شكري" },
   { file: "merna rezk.jpg", name: "Merna Rezk", nameAr: "ميرنا رزق" },
-  { file: "jozef rizk.jpg", name: "Jozef Rizk", nameAr: "جوزيف رزق" },
+  { file: "jozef rizk.jpg", name: "Jozef Rizk", nameAr: "چوزيف رزق" },
   { file: "ramez malak.jpg", name: "Ramez Malak", nameAr: "رامز ملاك" }
 
 ];
