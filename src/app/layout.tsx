@@ -25,8 +25,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  /** Same value as the manifest `theme_color` (installed status-bar tint). */
-  themeColor: themeConfig.colors.dark,
+  /**
+   * The page background, so the mobile status bar / browser chrome matches the
+   * page instead of showing a dark brown band above the tan. Same value as the
+   * manifest `theme_color` (installed status-bar tint).
+   */
+  themeColor: themeConfig.colors.pageBackground,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

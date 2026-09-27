@@ -4,15 +4,28 @@
   /* Fallback copies of src/config/theme.ts — the live values are injected
      from the theme config as an inline <style> tag by the root layouts.
      Keep these in sync to avoid a first-paint flash of outdated colors. */
-  --blue-dark: #33200f;
-  --blue-primary: #6b4426;
-  --blue-mid: #8a5730;
-  --blue-accent: #be7f42;
-  --blue-light: #efcfa8;
+  /* Brand palette, sampled from the logo (public/app-icon.png). */
+  --brand-tan: #be9366;
+  --brand-tan-light: #e3c6a3;
+  --brand-tan-dark: #8a5a2b;
+  --brand-tan-deep: #5f3a18;
+  --brand-text-dark: #4a2c12;
+  --brand-white: #ffffff;
+  --brand-text: #ffffff;
+  --brand-border: rgba(95, 58, 24, 0.22);
+  --brand-card: rgba(255, 255, 255, 0.16);
+  --brand-page: #be9366;
+
+  /* Legacy aliases — the `blue-*` names components already use. */
+  --blue-dark: #5f3a18;
+  --blue-primary: #a9743f;
+  --blue-mid: #8a5a2b;
+  --blue-accent: #5f3a18;
+  --blue-light: #4a2c12;
   --white: #ffffff;
-  --gradient-mid: #8a5730;
-  --gradient-dark: #40270f;
-  --gradient-deeper: #1c1005;
+  --gradient-mid: #c9a175;
+  --gradient-dark: #be9366;
+  --gradient-deeper: #b3875a;
 }
 
 @theme inline {
@@ -21,6 +34,13 @@
   --color-blue-mid: var(--blue-mid);
   --color-blue-accent: var(--blue-accent);
   --color-blue-light: var(--blue-light);
+  /* Lightening tint for decorative glows — can only lighten the tan. */
+  --color-blue-highlight: var(--brand-tan-light);
+  /* Brand palette exposed as Tailwind utilities too. */
+  --color-brand-tan: var(--brand-tan);
+  --color-brand-tan-light: var(--brand-tan-light);
+  --color-brand-tan-dark: var(--brand-tan-dark);
+  --color-brand-tan-deep: var(--brand-tan-deep);
 }
 
 html[lang="ar"],
@@ -36,8 +56,8 @@ html[lang="en"] body {
 }
 
 body {
-  background: var(--blue-dark);
-  color: var(--white);
+  background: var(--brand-page);
+  color: var(--brand-text);
   min-height: 100dvh;
 }
 
@@ -45,15 +65,22 @@ body {
   padding-bottom: calc(4rem + env(safe-area-inset-bottom));
 }
 
-/* Page background gradients — colors come from src/config/theme.ts. */
-.hero-gradient {
-  background: radial-gradient(ellipse at 50% 20%, var(--gradient-mid) 0%, var(--gradient-dark) 55%, var(--gradient-deeper) 100%);
-}
-.page-gradient {
-  background: radial-gradient(ellipse at 50% 0%, var(--gradient-mid) 0%, var(--gradient-dark) 70%);
-}
+/* Page background.
+   These three classes used to paint `radial-gradient(ellipse at 50% …, …)`.
+   A radial gradient with the default `farthest-corner` sizing re-shapes itself
+   to the element's aspect ratio, so the same stops described a wide warm circle
+   on a desktop window and a tall narrow ellipse on a phone — the dark stops
+   swallowed most of a phone screen while staying at the edges of a desktop
+   one. That was the desktop/mobile colour mismatch, and no media query was
+   involved: the same rule produced both results.
+
+   They are now a flat fill of the logo's tan, which has no geometry, so every
+   viewport is guaranteed the same colour. The class names are kept so no page
+   or component has to change. Colour values come from src/config/theme.ts. */
+.hero-gradient,
+.page-gradient,
 .page-gradient-high {
-  background: radial-gradient(ellipse at 50% 30%, var(--gradient-mid) 0%, var(--gradient-dark) 70%);
+  background: var(--brand-page);
 }
 
 @keyframes fadeUp {

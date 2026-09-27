@@ -72,7 +72,7 @@ export default async function CheckinPage({
     <html lang="ar" dir="rtl">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content={themeConfig.colors.dark} />
+        <meta name="theme-color" content={themeConfig.colors.pageBackground} />
         <title>تسجيل الحضور — {result.member?.name || ""}</title>
       </head>
       <body className="m-0 flex min-h-screen items-center justify-center bg-blue-dark">

@@ -31,8 +31,9 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   // Same source of truth as the app shell / PWA manifest, so the check-in
-  // status bar matches the meeting's palette instead of a hard-coded colour.
-  themeColor: themeConfig.colors.dark,
+  // status bar matches the meeting's page background instead of a hard-coded
+  // colour.
+  themeColor: themeConfig.colors.pageBackground,
 };
 
 export default function CheckinLayout({ children }: { children: React.ReactNode }) {

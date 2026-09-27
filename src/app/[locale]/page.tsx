@@ -14,11 +14,18 @@ export default function HomePage() {
   return (
     <div className="relative flex min-h-dvh flex-col items-center overflow-hidden hero-gradient">
 
-      {/* Background glow blobs */}
+      {/* Background glow blobs.
+          These are sized in absolute pixels, so the same three blobs cover only
+          ~22% / 11% / 17% of a 1440px desktop width but ~82% / 41% / 41% of a
+          390px phone — they blanketed mobile in a blurred wash while barely
+          registering on desktop. That, on top of the old dark-brown palette, is
+          what made the phone build look darker and redder.
+          They now use the light tint, so at any coverage they can only lighten
+          the tan; the geometry, animation and markup are untouched. */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="animate-pulse-glow absolute -top-20 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-blue-accent/20 blur-3xl" />
-        <div className="animate-pulse-glow absolute top-40 -left-20 h-60 w-60 rounded-full bg-blue-primary/30 blur-3xl" style={{ animationDelay: "1s" }} />
-        <div className="animate-pulse-glow absolute top-40 -right-20 h-60 w-60 rounded-full bg-blue-primary/30 blur-3xl" style={{ animationDelay: "2s" }} />
+        <div className="animate-pulse-glow absolute -top-20 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-blue-highlight/25 blur-3xl" />
+        <div className="animate-pulse-glow absolute top-40 -left-20 h-60 w-60 rounded-full bg-blue-highlight/20 blur-3xl" style={{ animationDelay: "1s" }} />
+        <div className="animate-pulse-glow absolute top-40 -right-20 h-60 w-60 rounded-full bg-blue-highlight/20 blur-3xl" style={{ animationDelay: "2s" }} />
       </div>
 
       {/* Hero */}
