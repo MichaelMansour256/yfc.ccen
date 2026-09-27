@@ -24,7 +24,7 @@ export const servantsTitleAr = "الخدام";
 export const servants: Servant[] = [
   
   { file: "ehab youssef.jpg", name: "Ehab Youssef", nameAr: "إيهاب يوسف" },
-  { file: "samira basher.jpg", name: "Samira Basher", nameAr: "سميرة باشر" },
+  { file: "samira boshra.jpg", name: "Samira Boshra", nameAr: "سميرة باشر" },
   { file: "amani gad.jpg", name: "Amani Gad", nameAr: "أماني جاد" },
   { file: "reham adly.jpg", name: "Reham Adly", nameAr: "ريهام عدلي" },
   { file: "mariam samy.jpg", name: "Mariam Samy", nameAr: "مريم سامي" },
