@@ -11,7 +11,7 @@
  */
 import type { Metadata, Viewport } from "next";
 import "../globals.css";
-import { themeCssVars } from "@/config";
+import { themeConfig, themeCssVars } from "@/config";
 import { Cairo } from "next/font/google";
 
 const cairo = Cairo({
@@ -30,7 +30,9 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0f1f5c",
+  // Same source of truth as the app shell / PWA manifest, so the check-in
+  // status bar matches the meeting's palette instead of a hard-coded colour.
+  themeColor: themeConfig.colors.dark,
 };
 
 export default function CheckinLayout({ children }: { children: React.ReactNode }) {

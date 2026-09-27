@@ -11,20 +11,20 @@ export interface SocialLink {
 
 export const siteConfig = {
   /** Full site/meeting title (browser tabs, PWA manifest name). */
-  name: "E3dady Youth Meeting",
+  name: "Youth For Christ Meeting",
   /** Short name (installed-app title, admin pages). */
-  shortName: "E3dady",
+  shortName: "Youth For Christ",
   /** Site description (SEO metadata + PWA manifest). */
   description: {
-    en: "E3dady Youth Meeting – Christ Church Ezbet El Nakhl",
-    ar: "اجتماع شباب إعدادي · كنيسة المسيح – عزبة النخل",
+    en: "Youth For Christ Meeting – Christ Church Ezbet El Nakhl",
+    ar: "إحنا شباب المسيح · كنيسة المسيح – عزبة النخل",
   },
   /**
    * Public site URL — base for push-notification click-through links.
    * Override with NEXT_PUBLIC_SITE_URL (set it in production so notification
    * links always point at the deployed site, not the local dev server).
    */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://e3dady-ccen.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://yfc-ccen.vercel.app",
 
   /** The church this meeting belongs to. */
   church: {
@@ -43,19 +43,28 @@ export const siteConfig = {
 
   /** Social links (rendered on the home hero and the contact page). */
   social: [
-    { name: "Facebook", url: "https://www.facebook.com/e3dady.ccen" },
-    { name: "Instagram", url: "https://www.instagram.com/e3dady.ccen" },
-    { name: "TikTok", url: "https://www.tiktok.com/@e3dady.ccen" },
-    { name: "YouTube", url: "https://www.youtube.com/@e3dady_ccen" },
-    { name: "Linktree", url: "https://linktr.ee/e3dady.ccen" },
+    { name: "Facebook", url: "https://www.facebook.com/youth.for.christ" },
+    { name: "Instagram", url: "https://www.instagram.com/youth.for.christ" },
+    { name: "TikTok", url: "https://www.tiktok.com/@youth.for.christ" },
+    { name: "YouTube", url: "https://www.youtube.com/@youthforchrist" },
+    { name: "Linktree", url: "https://linktr.ee/youth.for.christ" },
   ] satisfies SocialLink[],
 
   /** Branding assets under /public — replace these files for a new meeting. */
   assets: {
-    /** Round logo shown on the home hero and about page. */
-    logo: "/logo.png",
-    /** App/PWA icon (also used as notification icon). */
-    appIcon: "/app-icon.png",
+    /**
+     * Round logo shown on the home hero and about page.
+     * The artwork is vector (SVG) and doubles as the source for the PWA icon
+     * set, so it stays crisp at every size with no extra raster steps.
+     * The Arabic/English wordmark is NOT baked in — the site renders it as live
+     * text from `meetingConfig`, which keeps it editable and translatable.
+     */
+    logo: "/logo.svg",
+    /**
+     * App/PWA icon (also shown in the install banner). Same artwork as `logo`;
+     * `npm run generate-icons` rasterises it into the exact-size `icons/` set.
+     */
+    appIcon: "/logo.svg",
     /**
      * Exact-size PWA icons generated from `appIcon` by `npm run generate-icons`
      * — every file has exactly the size its manifest entry declares, because
@@ -83,10 +92,10 @@ export const siteConfig = {
    * `<meetingFolder>/verse_of_week` (verse JSON). Gallery event folders and
    * the `invitations` folder live outside it in the same cloud account.
    * Override with CLOUDINARY_MEETING_FOLDER for a new meeting (so a fresh
-   * meeting can reuse the same cloud without touching E3dady's data).
+   * meeting can reuse the same cloud without touching another meeting's data).
    */
   cloudinary: {
-    meetingFolder: process.env.CLOUDINARY_MEETING_FOLDER ?? "e3dady_events",
+    meetingFolder: process.env.CLOUDINARY_MEETING_FOLDER ?? "yfc_events",
   },
 };
 

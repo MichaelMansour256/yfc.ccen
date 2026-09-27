@@ -10,7 +10,7 @@ export type VerseRef = {
 };
 
 // Stored as a raw JSON resource under the meeting's Cloudinary namespace
-// (`siteConfig.cloudinary.meetingFolder`, default "e3dady_events").
+// (`siteConfig.cloudinary.meetingFolder`, default "yfc_events").
 const PUBLIC_ID = `${siteConfig.cloudinary.meetingFolder}/verse_of_week`;
 
 export async function getVerseRef(): Promise<VerseRef | null> {

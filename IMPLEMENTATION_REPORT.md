@@ -2,7 +2,7 @@
 
 ## Overview
 
-The QR Code Attendance System has been fully implemented for the `e3dady.ccen` project. The system allows members to have unique QR codes that can be scanned to record attendance at meetings.
+The QR Code Attendance System has been fully implemented for the `yfc.ccen` project. The system allows members to have unique QR codes that can be scanned to record attendance at meetings.
 
 ## Files Added
 

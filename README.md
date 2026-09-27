@@ -1,14 +1,14 @@
 <div align="center">
 
-# E3dady Youth Meeting
+# Youth For Christ Meeting
 
 ### Faith • Friendship • Growth
 **إيمان • أصحاب • نمو**
 
-A mobile-first, bilingual Progressive Web App for the **E3dady Youth Meeting**
+A mobile-first, bilingual Progressive Web App for the **Youth For Christ Meeting**
 at **Christ Church – Ezbet El Nakhl** (كنيسة المسيح – عزبة النخل).
 
-[**Live Website**](https://e3dady-ccen.vercel.app/) · [Template Guide](./TEMPLATE.md) · [Report an Issue](https://github.com/MichaelMansour256/e3dady.ccen/issues)
+[**Live Website**](https://yfc-ccen.vercel.app/) · [Template Guide](./TEMPLATE.md) · [Report an Issue](https://github.com/MichaelMansour256/yfc.ccen/issues)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
@@ -43,7 +43,7 @@ at **Christ Church – Ezbet El Nakhl** (كنيسة المسيح – عزبة ا
 
 ## About
 
-E3dady is the digital hub of the youth meeting. It keeps members connected
+Youth For Christ is the digital hub of the youth meeting. It keeps members connected
 through the week with meeting information, Scripture content, Bible games,
 photo galleries, a moderated prayer wall, and push notifications, while giving
 servants a single admin dashboard to run everything, including QR-based
@@ -124,7 +124,7 @@ Located at `/admin/attendance`.
 ## Architecture
 
 ```
-e3dady.ccen/
+yfc.ccen/
 ├── src/
 │   ├── app/
 │   │   ├── [locale]/            # Localized member-facing pages
@@ -167,8 +167,8 @@ JSON documents (special events, Verse of the Week) live in **Cloudinary**.
 ### Installation
 
 ```bash
-git clone https://github.com/MichaelMansour256/e3dady.ccen.git
-cd e3dady.ccen
+git clone https://github.com/MichaelMansour256/yfc.ccen.git
+cd yfc.ccen
 npm install
 cp .env.example .env.local
 ```
@@ -196,7 +196,7 @@ Copy `.env.example` to `.env.local`. Never commit real values.
 | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Public | Cloudinary cloud name |
 | `CLOUDINARY_API_KEY` | **Secret** | Cloudinary uploads and folder management |
 | `CLOUDINARY_API_SECRET` | **Secret** | Cloudinary uploads and folder management |
-| `CLOUDINARY_MEETING_FOLDER` | Optional | Folder for events/verse JSON (default `e3dady_events`) |
+| `CLOUDINARY_MEETING_FOLDER` | Optional | Folder for events/verse JSON (default `yfc_events`) |
 | `NEXT_PUBLIC_ONESIGNAL_APP_ID` | Public | OneSignal app ID (client) |
 | `ONESIGNAL_APP_ID` | **Secret** | OneSignal app ID (server; same value as above) |
 | `ONESIGNAL_API_KEY` | **Secret** | OneSignal REST API key for server-side sends |
@@ -244,7 +244,7 @@ Vercel cron schedules run in UTC.
 | `npm run build` | Create a production build |
 | `npm run start` | Run the production server |
 | `npm run lint` | Run ESLint |
-| `npm run generate-icons` | Regenerate PWA icons in `public/icons/` from `public/app-icon.png` |
+| `npm run generate-icons` | Regenerate PWA icons in `public/icons/` from the artwork in `public/` (`logo.svg`) |
 
 ---
 
@@ -306,7 +306,7 @@ opening a public issue.
 
 ## Contributing
 
-This project primarily serves the E3dady Youth Meeting, but improvements are
+This project primarily serves the Youth For Christ Meeting, but improvements are
 welcome.
 
 1. Create a feature branch from `main`.
@@ -319,7 +319,7 @@ welcome.
 
 ## License
 
-Maintained for the E3dady Youth Meeting at Christ Church – Ezbet El Nakhl.
+Maintained for the Youth For Christ Meeting at Christ Church – Ezbet El Nakhl.
 Unless otherwise specified, source code and original assets may not be
 redistributed or used commercially without permission from the maintainers.
 
@@ -337,7 +337,7 @@ redistributed or used commercially without permission from the maintainers.
 
 <div align="center">
 
-**E3dady Youth Meeting** · Christ Church – Ezbet El Nakhl
+**Youth For Christ Meeting** · Christ Church – Ezbet El Nakhl
 **Faith • Friendship • Growth**
 
 </div>

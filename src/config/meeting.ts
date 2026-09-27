@@ -7,29 +7,29 @@
  */
 export const meetingConfig = {
   /** Meeting name (Arabic). */
-  name: "اجتماع شباب إعدادي",
+  name: "إحنا شباب المسيح",
   /** Meeting name (English). */
-  nameEn: "E3dady Youth Meeting",
+  nameEn: "Youth For Christ Meeting",
   /** Short display name (installed PWA title, admin pages). */
-  shortName: "E3dady",
+  shortName: "Youth For Christ",
   /** Age group / stage the meeting serves. */
-  ageGroup: "إعدادي (Preparatory)",
+  ageGroup: "شباب (Youth)",
 
   /** One-line tagline (used on the contact page). */
   tagline: {
-    ar: "إجتماع شباب إعدادي",
-    en: "E3dady Youth Meeting",
+    ar: "إحنا شباب المسيح",
+    en: "Youth For Christ Meeting",
   },
 
   /** Home page hero texts. */
   hero: {
     welcome: {
-      ar: "أهلاً بيكم في اجتماع إعدادي",
-      en: "e3dady ccen",
+      ar: "أهلاً بيكم في اجتماع شباب المسيح",
+      en: "Youth For Christ Meeting",
     },
     subtitle: {
-      ar: "اجتماع شباب إعدادي · كنيسة المسيح – عزبة النخل",
-      en: "E3dady Youth Meeting · Christ Church – Ezbet El Nakhl",
+      ar: "إحنا شباب المسيح · كنيسة المسيح – عزبة النخل",
+      en: "Youth For Christ Meeting · Christ Church – Ezbet El Nakhl",
     },
   },
 
@@ -41,17 +41,17 @@ export const meetingConfig = {
    * The `label*` fields are the exact strings shown in the UI / notifications.
    */
   schedule: {
-    weekday: 5, // Friday
-    time: "12:30",
-    /** Weekly-meeting card line. */
-    labelAr: "كل جمعة · ١٢:٣٠ م",
-    labelEn: "Every Friday · 12:30 PM",
-    /** Reminder/push text building blocks. */
-    dayNameAr: "الجمعة",
-    dayNameEn: "Friday",
-    timeLabelAr: "١٢:٣٠",
-    timeLabelEn: "12:30 PM",
-  },
+  weekday: 5, // Friday
+  time: "18:30",
+  /** Weekly-meeting card line. */
+  labelAr: "كل جمعة · ٦:٣٠ م",
+  labelEn: "Every Friday · 6:30 PM",
+  /** Reminder/push text building blocks. */
+  dayNameAr: "الجمعة",
+  dayNameEn: "Friday",
+  timeLabelAr: "٦:٣٠",
+  timeLabelEn: "6:30 PM",
+},
 
   /** Meeting location (the church itself lives in `siteConfig.church`). */
   location: {
@@ -64,11 +64,11 @@ export const meetingConfig = {
     title: { ar: "من نحن", en: "About Us" },
     paragraphs: {
       ar: [
-        "إحنا اجتماع إعدادي في كنيسة المسيح – عزبة النخل، بنجتمع علشان نكبر مع بعض في علاقتنا بربنا، نفهم كلمته أكتر، ونعيش إيماننا بشكل حقيقي في حياتنا اليومية.",
+        "إحنا اجتماع شباب المسيح في كنيسة المسيح – عزبة النخل، بنجتمع علشان نكبر مع بعض في علاقتنا بربنا، نفهم كلمته أكتر، ونعيش إيماننا بشكل حقيقي في حياتنا اليومية.",
         "بالنسبالنا الاجتماع مش مجرد وقت بنقضيه كل أسبوع، لكنه مكان بنقابل فيه ربنا، وبنكوّن صداقات حقيقية، ونتعلم، ونخوض تجارب جديدة مع بعض.",
       ],
       en: [
-        "We are a youth meeting at Christ Church – Ezbet El Nakhl. We gather to grow together in our relationship with God, understand His word more deeply, and live out our faith in our everyday lives.",
+        "We are Youth For Christ, a meeting at Christ Church – Ezbet El Nakhl. We gather to grow together in our relationship with God, understand His word more deeply, and live out our faith in our everyday lives.",
         "For us, this meeting is not just time we spend every week — it's a place where we encounter God, build real friendships, learn, and experience new things together.",
       ],
     },

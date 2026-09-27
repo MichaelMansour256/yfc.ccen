@@ -229,6 +229,7 @@ export default function InstallBanner() {
               width={96}
               height={96}
               className="relative h-11 w-11 rounded-xl object-cover ring-2 ring-blue-accent/50"
+              unoptimized
             />
           </div>
 

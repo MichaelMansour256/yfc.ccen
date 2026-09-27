@@ -1,5 +1,5 @@
 -- =============================================================================
--- e3dady.ccen — QR Code Attendance System
+-- yfc.ccen — QR Code Attendance System
 -- =============================================================================
 -- HOW TO APPLY
 --   Supabase Dashboard → SQL Editor → New query → paste this whole file → Run.

@@ -4,15 +4,15 @@
   /* Fallback copies of src/config/theme.ts — the live values are injected
      from the theme config as an inline <style> tag by the root layouts.
      Keep these in sync to avoid a first-paint flash of outdated colors. */
-  --blue-dark: #0f1f5c;
-  --blue-primary: #1a3a8f;
-  --blue-mid: #1e40af;
-  --blue-accent: #3b82f6;
-  --blue-light: #93c5fd;
+  --blue-dark: #33200f;
+  --blue-primary: #6b4426;
+  --blue-mid: #8a5730;
+  --blue-accent: #be7f42;
+  --blue-light: #efcfa8;
   --white: #ffffff;
-  --gradient-mid: #1a4db5;
-  --gradient-dark: #0f1f5c;
-  --gradient-deeper: #060d2e;
+  --gradient-mid: #8a5730;
+  --gradient-dark: #40270f;
+  --gradient-deeper: #1c1005;
 }
 
 @theme inline {

@@ -13,6 +13,7 @@
  * the page loads fast on mobile and works without client JS.
  */
 import { checkIn, type CheckInResult } from "@/lib/attendance";
+import { themeConfig } from "@/config";
 
 interface CheckinResult {
   type: "success" | "already_recorded" | "invalid_token" | "inactive_member" | "no_active_meeting" | "error";
@@ -71,7 +72,7 @@ export default async function CheckinPage({
     <html lang="ar" dir="rtl">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#0f1f5c" />
+        <meta name="theme-color" content={themeConfig.colors.dark} />
         <title>تسجيل الحضور — {result.member?.name || ""}</title>
       </head>
       <body className="m-0 flex min-h-screen items-center justify-center bg-blue-dark">

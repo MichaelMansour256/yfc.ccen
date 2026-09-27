@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 512 512" role="img" aria-label="Youth For Christ Meeting">
+  <title>Youth For Christ Meeting</title>
+  <defs>
+    <!-- Brand tile background — matches the caramel/tan gradient of the logo. -->
+    <linearGradient id="yfc-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c9975f" />
+      <stop offset="1" stop-color="#ae7b45" />
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#yfc-bg)" />
+
+  <!--
+    Emblem: the broken ring + YFC monogram + cross.
+    Scaled to 0.92 about the tile centre so the ring's outer edge (≈64% of the
+    tile width) stays inside the 80% safe circle Android crops maskable icons to.
+  -->
+  <g transform="translate(256 256) scale(0.92) translate(-256 -250)">
+    <g fill="none" stroke="#ffffff" stroke-linecap="butt">
+      <!-- Broken ring -->
+      <path d="M 297.4 95.5 A 160 160 0 0 1 415.4 236.1" stroke-width="38" />
+      <path d="M 406.4 304.7 A 160 160 0 0 1 283.8 407.6" stroke-width="38" />
+      <path d="M 228.2 407.6 A 160 160 0 0 1 201.3 99.6" stroke-width="38" />
+
+      <!-- Y (left arm merges into the ring) -->
+      <path d="M 140 155 L 200 290 L 258 152" stroke-width="40" stroke-linejoin="miter" />
+      <!-- Cross — the vertical continues the Y stem down into the bottom ring -->
+      <path d="M 200 290 L 200 410" stroke-width="38" />
+      <path d="M 152 330 L 236 330" stroke-width="36" />
+      <!-- F -->
+      <path d="M 300 265 L 300 140 L 386 140" stroke-width="36" stroke-linejoin="miter" />
+      <path d="M 300 200 L 366 200" stroke-width="36" />
+      <!-- C -->
+      <path d="M 348.6 322.2 A 54 54 0 1 0 348.6 413.8" stroke-width="34" />
+    </g>
+  </g>
+</svg>

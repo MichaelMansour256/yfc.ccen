@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Generates the exact-size PWA icon set in `public/icons/` from the meeting's
- * artwork (`public/app-icon.png`).
+ * artwork (`public/logo.svg`, or a square `public/app-icon.png`).
  *
  * Why this exists
  * ---------------
@@ -19,7 +19,7 @@
  * Maskable icons (Android adaptive launcher icons) are generated too, because
  * without one the Android launcher wraps the icon in its own generic padding.
  *
- * Usage (after replacing `public/app-icon.png`):
+ * Usage (after replacing the artwork in `public/`):
  *     npm run generate-icons
  */
 
@@ -27,10 +27,36 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const sharp = require("sharp");
 
-/** Artwork the icons are derived from — `siteConfig.assets.appIcon`. */
-const SOURCE = path.join(__dirname, "..", "public", "app-icon.png");
 /** Output directory — `siteConfig.assets.pwaIcons`. */
 const OUT_DIR = path.join(__dirname, "..", "public", "icons");
+
+/**
+ * Artwork the icons are derived from — `siteConfig.assets.appIcon`.
+ *
+ * Vector (`.svg`) is preferred and rasterised by sharp, so the branding can
+ * live as a single crisp source file that needs no export step; a square
+ * `.png` is still accepted as a fallback.
+ */
+const SOURCE_CANDIDATES = ["logo.svg", "app-icon.svg", "app-icon.png"].map((file) =>
+  path.join(__dirname, "..", "public", file)
+);
+
+/** First existing artwork file, or a helpful error naming the accepted names. */
+async function resolveSource() {
+  for (const candidate of SOURCE_CANDIDATES) {
+    try {
+      await fs.access(candidate);
+      return candidate;
+    } catch {
+      // Not there — fall through to the next candidate.
+    }
+  }
+  throw new Error(
+    `no icon artwork found in public/ — expected one of: ${SOURCE_CANDIDATES.map((file) =>
+      path.basename(file)
+    ).join(", ")}`
+  );
+}
 
 /** `purpose: "any"` icons. Keep in sync with the manifest + layout metadata. */
 const ANY_SIZES = [48, 192, 512];
@@ -67,13 +93,15 @@ const round1 = (v) => Math.round(v * 10) / 10;
  * - the background gradient's two stops (so the padding painted behind the
  *   rounded tile matches the tile's own colours and has no visible seam).
  */
-async function inspectArtwork() {
-  const { width, height } = await sharp(SOURCE).metadata();
+async function inspectArtwork(source) {
+  const { width, height } = await sharp(source).metadata();
   if (!width || width !== height) {
-    throw new Error(`app-icon.png must be a square PNG (got ${width}x${height})`);
+    throw new Error(
+      `${path.basename(source)} must be square artwork (got ${width}x${height})`
+    );
   }
 
-  const { data } = await sharp(SOURCE)
+  const { data } = await sharp(source)
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
@@ -97,7 +125,9 @@ async function inspectArtwork() {
     }
   }
   if (box.maxX < 0) {
-    throw new Error(`no emblem pixels brighter than ${ART_LUMINANCE} found in app-icon.png`);
+    throw new Error(
+      `no emblem pixels brighter than ${ART_LUMINANCE} found in ${path.basename(source)}`
+    );
   }
 
   // Furthest emblem pixel from the tile centre — the radius a maskable icon
@@ -144,9 +174,9 @@ function backgroundSvg(size, gradient) {
 }
 
 /** Lossless resize that keeps the tile's transparent rounded corners. */
-async function writePlainIcon(size, file) {
+async function writePlainIcon(size, file, source) {
   const target = path.join(OUT_DIR, file);
-  await sharp(SOURCE).resize(size, size, { fit: "cover" }).png(PNG).toFile(target);
+  await sharp(source).resize(size, size, { fit: "cover" }).png(PNG).toFile(target);
   return target;
 }
 
@@ -156,11 +186,11 @@ async function writePlainIcon(size, file) {
  * tile's transparent rounded corners show the background); smaller fractions pad
  * the artwork so it stays inside the Android safe circle.
  */
-async function writePaddedIcon(size, fraction, gradient, file) {
+async function writePaddedIcon(size, fraction, gradient, file, source) {
   const target = path.join(OUT_DIR, file);
   const tileSize = Math.round(size * fraction);
   const offset = Math.round((size - tileSize) / 2);
-  const tile = await sharp(SOURCE)
+  const tile = await sharp(source)
     .resize(tileSize, tileSize, { fit: "cover" })
     .png()
     .toBuffer();
@@ -173,11 +203,12 @@ async function writePaddedIcon(size, fraction, gradient, file) {
 }
 
 async function main() {
-  const art = await inspectArtwork();
+  const source = await resolveSource();
+  const art = await inspectArtwork(source);
   await fs.mkdir(OUT_DIR, { recursive: true });
 
   console.log(
-    `artwork   ${path.relative(path.join(__dirname, ".."), SOURCE)} ${art.width}x${art.height}` +
+    `artwork   ${path.relative(path.join(__dirname, ".."), source)} ${art.width}x${art.height}` +
       ` · emblem ${art.emblem.width}x${art.emblem.height}` +
       ` · emblem radius ${round1(art.radius)}px` +
       ` · gradient ${art.gradient.from} → ${art.gradient.to}`
@@ -189,15 +220,19 @@ async function main() {
   };
 
   for (const size of ANY_SIZES) {
-    await report(await writePlainIcon(size, `icon-${size}x${size}.png`));
+    await report(await writePlainIcon(size, `icon-${size}x${size}.png`, source));
   }
 
-  // Maskable icons keep the emblem inside the safe circle, padded with the
-  // artwork's own gradient so the Android launcher has nothing to re-invent.
   const safeFraction = Math.min(1, (SAFE_RADIUS_RATIO * art.width) / art.radius);
   for (const size of MASKABLE_SIZES) {
     await report(
-      await writePaddedIcon(size, safeFraction, art.gradient, `maskable-${size}x${size}.png`)
+      await writePaddedIcon(
+        size,
+        safeFraction,
+        art.gradient,
+        `maskable-${size}x${size}.png`,
+        source
+      )
     );
   }
 
@@ -208,7 +243,8 @@ async function main() {
       APPLE_TOUCH_SIZE,
       1,
       art.gradient,
-      `apple-touch-icon-${APPLE_TOUCH_SIZE}x${APPLE_TOUCH_SIZE}.png`
+      `apple-touch-icon-${APPLE_TOUCH_SIZE}x${APPLE_TOUCH_SIZE}.png`,
+      source
     )
   );
 

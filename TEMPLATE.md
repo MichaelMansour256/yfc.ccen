@@ -4,8 +4,8 @@ This repository is a **reusable template for church meeting websites**. The code
 defines *how the website works*; the configuration under `src/config/` defines
 *which meeting the website represents*.
 
-The E3dady Youth Meeting site is the **reference implementation** — all default
-config values are its live values. Creating a new meeting website means
+The Youth For Christ Meeting site is the **reference implementation** — all
+default config values are its live values. Creating a new meeting website means
 changing configuration + assets, not rewriting components.
 
 ---
@@ -44,7 +44,7 @@ changing configuration + assets, not rewriting components.
 | `src/config/features.ts` | Feature flags for major optional sections (events, bible, games, gallery, prayer wall, servants, about, contact, notifications) |
 | `src/config/index.ts` | Barrel — everything is imported from `@/config` |
 | `messages/ar.json`, `messages/en.json` | Generic UI labels (nav items, section titles) in both languages |
-| `public/` | Meeting-specific assets: `logo.png`, `app-icon.png`, `icons/` (generated PWA icons), `appstore-images/` (splash screens), `servants images/` |
+| `public/` | Meeting-specific assets: `logo.svg` (branding artwork), `icons/` (generated PWA icons), `appstore-images/` (splash screens), `servants images/` |
 | `.env.local` | Environment-specific: Supabase, Cloudinary, OneSignal, admin password, cron secret (see `.env.example`) |
 
 ---
@@ -59,8 +59,9 @@ changing configuration + assets, not rewriting components.
   `<style>` tag (`themeCssVars()`), so **`src/config/theme.ts` is the live
   source of truth**. The `:root` values in `globals.css` are SSR fallbacks —
   keep them in sync to avoid a first-paint flash of old colors.
-- The token *names* (`blue-*`) are legacy — they don't have to be blue. A
-  gold/red/green meeting only changes the values in `theme.ts`, plus
+- The token *names* (`blue-*`) are legacy — they don't have to be blue. (The
+  current values are a warm caramel/brown palette taken from the meeting's
+  logo.) A gold/red/green meeting only changes the values in `theme.ts`, plus
   the PWA theme colors which come from the same config (metadata, manifest).
 
 > ⚠️ Editor hint: VS Code's built-in CSS linter flags `@theme` as an unknown
@@ -117,21 +118,31 @@ Replace the servants array (name + Arabic name) and drop the photos into
 
 | Asset | Used for |
 |---|---|
-| `public/logo.png` | Home hero + About page logo |
+| `public/logo.svg` | The single source of truth for the branding: home hero, About page, install banner, **and** the artwork the PWA icons are generated from |
 | `public/icons/**` | Generated exact-size PWA/manifest icons (do not hand-edit) |
-| `public/app-icon.png` | Source artwork for the generated icons above; after replacing it run `npm run generate-icons` |
 | `public/appstore-images/**` | PWA splash screens / platform icons (regenerate with a PWA asset tool) |
 | `public/servants images/` | Servants photos |
 | `public/OneSignalSDKWorker.js`, `OneSignalSDKUpdaterWorker.js` | OneSignal service workers — keep as-is |
 
-After replacing `public/app-icon.png`, regenerate the exact-size icon set that
+The branding artwork is **vector** (`public/logo.svg`). It is served directly
+by the site and rasterised into every PWA size by the same script, so there is
+no separate PNG export step to keep in sync. `scripts/generate-pwa-icons.js`
+picks the first of `logo.svg`, `app-icon.svg`, `app-icon.png` it finds in
+`public/`, so dropping in a square PNG instead works too.
+
+After replacing the artwork, regenerate the exact-size icon set that
 `src/app/manifest.ts` and the `<head>` metadata declare. Browsers verify each
 declared `sizes` against the *downloaded* image, so stale icons make an
 installed app fall back to the browser's default icon:
 
 ```bash
-npm run generate-icons   # writes public/icons/*.png from app-icon.png
+npm run generate-icons   # writes public/icons/*.png from the artwork in public/
 ```
+
+> Note: the artwork is rendered with `next/image`'s `unoptimized` prop, because
+> the image optimizer rejects SVG sources unless `dangerouslyAllowSVG` is on.
+> OneSignal push icons point at the **generated** `icons/icon-512x512.png`
+> rather than the SVG, because that API only accepts raster icons.
 
 Update `messages/ar.json` / `messages/en.json` for generic UI labels
 (`nav`, `events`, `bible`, `games`, `more` namespaces). Meeting identity text
@@ -172,11 +183,11 @@ and admin routes touch these tables.
 gallery photos from any root folder except `invitations` and the meeting
 folder. Admin uploads photos into event folders it creates. For a shared
 cloud account, set `CLOUDINARY_MEETING_FOLDER` to a unique namespace for the
-new meeting so the E3dady data stays untouched.
+new meeting so the reference meeting's data stays untouched.
 
 **OneSignal**: create a new web-push app, set its ID + REST API key in env,
 keep the two `OneSignalSDKWorker*.js` files in `public/` (v16 stubs at root
-scope). Nothing else in the notification stack is E3dady-specific.
+scope). Nothing else in the notification stack is meeting-specific.
 
 **Vercel crons** (`vercel.json`): review the schedules — they assume a
 Thursday-evening invitation reminder (`0 17 * * 4`) and a Sunday-morning
@@ -214,17 +225,19 @@ npm run dev     # http://localhost:3000
 | Admin dashboard | ✅ | `ADMIN_PASSWORD` env |
 | Bible verse of the week | ✅ (GetBible API) | admin-selected weekly verse data |
 
-## Intentionally E3dady-Specific Remainders
+## Intentionally Meeting-Specific Remainders
 
-- `package.json` name `e3dady.ccen` (project identifier).
-- Default `siteConfig.cloudinary.meetingFolder = "e3dady_events"` and the
-  default `siteConfig.url` (`https://e3dady-ccen.vercel.app`) — the live
-  E3dady values; override via `CLOUDINARY_MEETING_FOLDER` /
+- `package.json` name `yfc.ccen` (project identifier).
+- Default `siteConfig.cloudinary.meetingFolder = "yfc_events"` and the
+  default `siteConfig.url` (`https://yfc-ccen.vercel.app`) — the live
+  reference values; override via `CLOUDINARY_MEETING_FOLDER` /
   `NEXT_PUBLIC_SITE_URL`.
-- `public/` branding assets (logo, icon, splash screens, servants photos).
+- The social link handles in `siteConfig.social` — placeholders for this
+  meeting; point them at the real accounts.
+- `public/` branding assets (artwork, splash screens, servants photos).
 - The **Verse Up Arena** game embed (`src/app/[locale]/games/page.tsx` →
   `verse-up-arena.vercel.app`) is an external product tied to this ecosystem —
   change the URL/logo in the games page for a different game platform.
 - Supabase data itself (existing prayer requests / notification history).
-- Repository URL references in the README (deployment/E3dady history).
+- Repository URL references in the README (deployment history).
 

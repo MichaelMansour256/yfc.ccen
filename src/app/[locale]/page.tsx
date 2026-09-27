@@ -28,7 +28,7 @@ export default function HomePage() {
         <div className="animate-fade-up relative mb-6">
           <div className="absolute inset-0 rounded-full bg-blue-accent/25 blur-2xl scale-125" />
           <div className="relative h-40 w-40 overflow-hidden rounded-full shadow-2xl shadow-blue-accent/40 ring-4 ring-blue-accent/50">
-            <Image src={siteConfig.assets.logo} alt={`${siteConfig.shortName} Logo`} width={160} height={160} className="h-full w-full object-cover" priority />
+            <Image src={siteConfig.assets.logo} alt={`${siteConfig.shortName} Logo`} width={160} height={160} className="h-full w-full object-cover" priority unoptimized />
           </div>
         </div>
 

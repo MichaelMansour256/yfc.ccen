@@ -65,11 +65,11 @@
     "loadMore": "Load more"
   },
   "install": {
-    "dialogLabel": "Install the E3dady app",
-    "title": "Install the E3dady app",
-    "description": "Enjoy E3dady as a standalone app from your home screen.",
+    "dialogLabel": "Install the Youth For Christ app",
+    "title": "Install the Youth For Christ app",
+    "description": "Enjoy Youth For Christ as a standalone app from your home screen.",
     "install": "Install",
-    "installAria": "Install the E3dady app on this device",
+    "installAria": "Install the Youth For Christ app on this device",
     "later": "Later",
     "laterAria": "Hide the install banner and remind me later"
   }

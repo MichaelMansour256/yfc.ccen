@@ -9,7 +9,7 @@
 -- Identity: `subscriber_id` is the OneSignal Web SDK Push Subscription id
 -- (OneSignal.User.PushSubscription.id, resolved in
 -- src/lib/onesignal-subscriber.ts) — the only stable, anonymous, per-device
--- identifier this app has. E3dady has no end-user accounts (the only auth in
+-- identifier this app has. The app has no end-user accounts (the only auth in
 -- the project is the admin password), so there is no user id to use instead.
 --
 -- HOW TO APPLY: paste this whole file into Supabase → SQL Editor → Run.

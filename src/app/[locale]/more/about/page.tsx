@@ -17,7 +17,7 @@ export default async function AboutPage() {
 
         {/* Logo */}
         <div className="h-28 w-28 overflow-hidden rounded-full shadow-2xl shadow-blue-accent/30 ring-4 ring-blue-accent/40">
-          <Image src={siteConfig.assets.logo} alt={`${siteConfig.shortName} Logo`} width={112} height={112} className="h-full w-full object-cover" />
+          <Image src={siteConfig.assets.logo} alt={`${siteConfig.shortName} Logo`} width={112} height={112} className="h-full w-full object-cover" unoptimized />
         </div>
 
         {/* Main description */}

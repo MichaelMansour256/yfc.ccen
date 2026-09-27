@@ -1,5 +1,5 @@
 -- =============================================================================
--- e3dady.ccen — Studies & Resources content library
+-- yfc.ccen — Studies & Resources content library
 -- =============================================================================
 -- HOW TO APPLY
 --   Supabase Dashboard → SQL Editor → New query → paste this whole file → Run.

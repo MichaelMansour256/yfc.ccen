@@ -69,7 +69,7 @@ export async function generateAttendanceWorkbook(
   report: MeetingMemberRow[]
 ): Promise<ExcelJS.Workbook> {
   const wb = new ExcelJS.Workbook();
-  wb.creator = "e3dady.ccen attendance";
+  wb.creator = "yfc.ccen attendance";
   wb.created = new Date();
 
   const present = report.filter((r) => r.present).length;

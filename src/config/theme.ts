@@ -17,15 +17,15 @@
 export const themeConfig = {
   colors: {
     /** Page background / darkest brand tone (maps to `--blue-dark`). */
-    dark: "#0f1f5c",
+    dark: "#33200f",
     /** Primary brand tone, surfaces and cards (maps to `--blue-primary`). */
-    primary: "#1a3a8f",
+    primary: "#6b4426",
     /** Mid brand tone, borders and muted surfaces (maps to `--blue-mid`). */
-    mid: "#1e40af",
+    mid: "#8a5730",
     /** Accent — active states, highlights, links (maps to `--blue-accent`). */
-    accent: "#3b82f6",
+    accent: "#be7f42",
     /** Light secondary text on dark background (maps to `--blue-light`). */
-    light: "#93c5fd",
+    light: "#efcfa8",
     /** Base text color (maps to `--white`). */
     white: "#ffffff",
     /**
@@ -33,9 +33,9 @@ export const themeConfig = {
      * `.page-gradient` and `.page-gradient-high` in `globals.css`.
      */
     gradient: {
-      mid: "#1a4db5",
-      dark: "#0f1f5c",
-      deeper: "#060d2e",
+      mid: "#8a5730",
+      dark: "#40270f",
+      deeper: "#1c1005",
     },
   },
 };

@@ -3,7 +3,7 @@
  *
  * 1. SERVER (preferred): `notification_reads` rows keyed by the device's
  *    OneSignal Push Subscription id — the only stable anonymous identity this
- *    app has (E3dady has no end-user accounts; src/lib/auth.ts only knows the
+ *    app has (the app has no end-user accounts; src/lib/auth.ts only knows the
  *    admin password). Writes go through POST /api/notifications/read, which
  *    uses the service-role Supabase client; RLS on notification_reads has no
  *    policies, so the browser can never touch the table directly and no

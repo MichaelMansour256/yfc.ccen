@@ -43,9 +43,11 @@ export async function sendNotification({
     // Do NOT send `url` alongside `web_url`; OneSignal rejects: "Remove url
     // field when setting app_url or web_url".
     web_url: fullUrl,
-    chrome_web_icon: `${siteUrl}/app-icon.png`,
-    chrome_icon: `${siteUrl}/app-icon.png`,
-    firefox_icon: `${siteUrl}/app-icon.png`,
+    // OneSignal only accepts raster icons here (PNG/JPG/GIF/ICO — not SVG), so
+    // point at the generated 512px bitmap rather than the vector source.
+    chrome_web_icon: `${siteUrl}${siteConfig.assets.pwaIcons.icon512}`,
+    chrome_icon: `${siteUrl}${siteConfig.assets.pwaIcons.icon512}`,
+    firefox_icon: `${siteUrl}${siteConfig.assets.pwaIcons.icon512}`,
     // Large invitation image (Android big picture + Chrome/Firefox large icon).
     // Only included when the caller passes one (Thursday invitation cron).
     ...(image

@@ -397,7 +397,7 @@ export default function ContentManager({ password }: { password: string }) {
               className={INPUT}
             />
             <p className="mt-1 text-xs text-blue-light/50">
-              The file stays where it already is (Drive, YouTube, Cloudinary…). E3dady stores the link and
+              The file stays where it already is (Drive, YouTube, Cloudinary…). The app stores the link and
               presents it — only the cover image below is uploaded here.
             </p>
           </div>
