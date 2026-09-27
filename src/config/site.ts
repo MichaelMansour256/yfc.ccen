@@ -45,8 +45,9 @@ export const siteConfig = {
   social: [
     { name: "Facebook", url: "https://www.facebook.com/profile.php?id=61565610140238" },
     { name: "Instagram", url: "https://www.instagram.com/yfc_meeting" },
+    { name: "TikTok", url: "https://www.tiktok.com/@yfcmeeting" },
     { name: "SoundCloud", url: "https://soundcloud.com/youth-christ-church" }
-    //{ name: "Linktree", url: "https://linktr.ee/youth.for.christ" },
+    // { name: "Linktree", url: "https://linktr.ee/youth.for.christ" },
   ] satisfies SocialLink[],
 
   /** Branding assets under /public — replace these files for a new meeting. */
