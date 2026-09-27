@@ -18,7 +18,7 @@ import { createClient } from "@supabase/supabase-js";
  * so a bad value can never take the whole app down with "Invalid API key".
  */
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const fallbackKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+const fallbackKey = process.env.SUPABASE_ANON_KEY ?? "";
 
 function pickServerKey(): string | null {
   const candidate = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? "";
@@ -52,7 +52,7 @@ const supabaseKey = serverSecret ?? fallbackKey;
 if (typeof window === "undefined" && !serverSecret) {
   console.warn(
     "[supabase] No valid SUPABASE_SERVICE_ROLE_KEY configured — server routes use the " +
-      "publishable/secret key from NEXT_PUBLIC_SUPABASE_ANON_KEY. Set the service key " +
+      "publishable/secret key from SUPABASE_ANON_KEY. Set the service key " +
       "(Supabase → Project Settings → API keys) and apply supabase-attendance-lockdown.sql " +
       "to lock attendance down to staff-only."
   );
