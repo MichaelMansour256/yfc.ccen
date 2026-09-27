@@ -54,23 +54,25 @@ export const siteConfig = {
   assets: {
     /**
      * Round logo shown on the home hero and about page.
-     * The artwork is vector (SVG) and doubles as the source for the PWA icon
-     * set, so it stays crisp at every size with no extra raster steps.
-     * The Arabic/English wordmark is NOT baked in — the site renders it as live
-     * text from `meetingConfig`, which keeps it editable and translatable.
+     * The artwork is vector (SVG) and doubles as a decorative display mark.
+     * The Arabic/English wordmark is NOT part of the app icon — the site renders
+     * the meeting name as live text from `meetingConfig`, which keeps it
+     * editable and translatable.
      */
     logo: "/logo.svg",
     /**
-     * App/PWA icon (also shown in the install banner). Same artwork as `logo`;
-     * `npm run generate-icons` rasterises it into the exact-size `icons/` set.
+     * App/PWA icon (also shown in the install banner and as the source for every
+     * generated raster icon). This is the text-free brand mark: `npm run
+     * generate-appstore-icons` derives the whole `public/appstore-images/` set
+     * and `npm run generate-icons` the `public/icons/` set from this one file.
      */
-    appIcon: "/logo.svg",
+    appIcon: "/app-icon.png",
     /**
      * Exact-size PWA icons generated from `appIcon` by `npm run generate-icons`
      * — every file has exactly the size its manifest entry declares, because
      * browsers validate the declaration against the downloaded bitmap (a
      * mismatch leaves the installed app without the icon it asked for).
-     * Regenerate them after replacing `app-icon.png`.
+     * Regenerate them after replacing `appIcon`.
      */
     pwaIcons: {
       /** Browser tab icon (transparent corners). */
