@@ -6,23 +6,24 @@
     "games": "الألعاب",
     "more": "المزيد"
   },
-  "events": {
-    "title": "ميعاد الاجتماع",
-    "upcoming": "القادمة",
-    "past": "الايام السابقة"
-  },
   "bible": {
     "title": "الكتاب المقدس",
     "verseOfWeek": "آية الأسبوع",
     "studies": "الدراسات",
-    "resources": "الموارد"
+    "resources": "الموارد",
+    "description": "دراسات وموارد كتابية وآية الأسبوع."
   },
   "games": {
     "title": "الألعاب",
     "holyWordle": "ووردل المقدس",
     "crossword": "الكلمات المتقاطعة",
     "whoAmI": "من أنا؟",
-    "emojiBible": "إيموجي الكتاب المقدس"
+    "emojiBible": "إيموجي الكتاب المقدس",
+    "verseUpSubtitle": "تحدي آيات الكتاب المقدس",
+    "verseUpCta": "العب الآن ▶",
+    "verseUpBack": "رجوع",
+    "verseUpTitle": "Verse Up Arena",
+    "description": "ألعاب كتابية من اجتماع شباب المسيح."
   },
   "more": {
     "title": "المزيد",
@@ -30,9 +31,111 @@
     "gallery": "معرض الصور",
     "servants": "الخدام",
     "prayerWall": "جدار الصلاة",
-    "contact": "هتلاقينا هنا"
+    "contact": "هتلاقينا هنا",
+    "description": "المزيد من اجتماع شباب المسيح."
+  },
+  "servants": {
+    "title": "الخدام",
+    "photoAlt": "صورة {name}",
+    "description": "خدام اجتماع شباب المسيح."
+  },
+  "contact": {
+    "title": "هتلاقينا هنا",
+    "followUs": "تابعنا",
+    "openLink": "افتح {name} في نافذة جديدة",
+    "description": "تواصل مع اجتماع شباب المسيح."
+  },
+  "gallery": {
+    "title": "معرض الصور",
+    "all": "الكل",
+    "playSlideshow": "▶ عرض الصور ({count} صورة)",
+    "loading": "جاري التحميل…",
+    "noPhotos": "لا توجد صور بعد",
+    "play": "تشغيل",
+    "pause": "إيقاف",
+    "close": "إغلاق",
+    "counter": "{index} / {total}",
+    "previousPhoto": "الصورة السابقة",
+    "nextPhoto": "الصورة التالية",
+    "description": "صور من اجتماع شباب المسيح."
+  },
+  "verse": {
+    "title": "آية الأسبوع",
+    "loading": "جاري التحميل…",
+    "empty": "لم يتم تحديد آية الأسبوع بعد",
+    "translation": "ترجمة فاندايك",
+    "note": "ملاحظة",
+    "weekOf": "آية أسبوع {month}",
+    "verseAlt": "{reference}",
+    "description": "آية الأسبوع من اجتماع شباب المسيح."
+  },
+  "prayerWall": {
+    "title": "جدار الصلاة",
+    "thankYou": "شكراً! طلبك قيد المراجعة",
+    "underReview": "سيظهر بعد موافقة الخادم",
+    "addAnother": "أضف طلباً آخر",
+    "formTitle": "✝️ شارك بطلب صلاة",
+    "namePlaceholder": "اسمك (اختياري)",
+    "requestPlaceholder": "اكتب طلب صلاتك هنا…",
+    "send": "أرسل الطلب 🙏",
+    "loading": "جاري التحميل…",
+    "empty": "لا توجد طلبات صلاة بعد",
+    "pray": "صلِّ",
+    "requestAlt": "طلب صلاة من {name}",
+    "description": "شارك طلب صلاة مع اجتماع شباب المسيح."
+  },
+  "weeklyMeeting": {
+    "title": "الاجتماع الأسبوعي",
+    "today": "اليوم!",
+    "next": "القادم:",
+    "days": "يوم",
+    "hours": "ساعة",
+    "minutes": "دقيقة",
+    "seconds": "ثانية"
+  },
+  "push": {
+    "title": "الإشعارات",
+    "loading": "الإشعارات",
+    "unsupported": "الإشعارات غير مدعومة",
+    "unsupportedHint": "افتح الموقع في كروم أو سفاري لتفعيل الإشعارات",
+    "blocked": "الإشعارات محظورة",
+    "blockedHint": "افتح ⚙️ إعدادات المتصفح ← الإشعارات ← سماح، ثم ارجع هنا",
+    "on": "الإشعارات مفعّلة ✅",
+    "enabling": "جاري التفعيل…",
+    "enable": "فعّل إشعارات الاجتماع 🔔",
+    "enableHint": "اضغط للتفعيل — ستصلك الدعوة وآية الأسبوع"
+  },
+  "events": {
+    "title": "الفعاليات",
+    "upcoming": "فعاليات قادمة",
+    "past": "فعاليات سابقة",
+    "loading": "جاري التحميل…",
+    "invitationHistory": "سجل الدعوات",
+    "noEvents": "لا توجد فعاليات حالياً",
+    "invitationAlt": "دعوة الاجتماع",
+    "eventAlt": "صورة الفعالية",
+    "description": "الاجتماعات والفعاليات القادمة."
+  },
+  "about": {
+    "title": "من نحن",
+    "churchFooter": "{church}",
+    "description": "عن اجتماع شباب المسيح في كنيسة المسيح – عزبة النخل."
+  },
+  "metadata": {
+    "title": "إحنا شباب المسيح",
+    "description": "إحنا شباب المسيح · كنيسة المسيح – عزبة النخل",
+    "homeTitle": "الرئيسية",
+    "servantsTitle": "الخدام",
+    "contactTitle": "هتلاقينا هنا",
+    "galleryTitle": "معرض الصور",
+    "aboutTitle": "من نحن",
+    "prayerWallTitle": "جدار الصلاة",
+    "notificationsTitle": "الإشعارات",
+    "verseTitle": "آية الأسبوع",
+    "gamesTitle": "الألعاب"
   },
   "content": {
+    "title": "الدراسات والموارد",
     "searchPlaceholder": "ابحث بالعنوان…",
     "allCategories": "كل التصنيفات",
     "allTypes": "كل الأنواع",
@@ -44,13 +147,18 @@
     "relatedResources": "موارد متعلقة",
     "relatedStudy": "مرتبط بدراسة",
     "openInNewTab": "يفتح في نافذة جديدة",
+    "showForSection": "شاهد {section} المتعلقة بـ {reference}",
+    "openRelatedStudy": "افتح الدراسة المرتبطة",
+    "sectionStudies": "الدراسات",
+    "sectionResources": "الموارد",
     "emptyStudies": "لا توجد دراسات منشورة بعد",
     "emptyResources": "لا توجد موارد منشورة بعد",
     "noResults": "لا توجد نتائج مطابقة",
     "clearFilters": "مسح كل الفلاتر",
     "loading": "جاري التحميل…",
     "error": "تعذّر تحميل المحتوى",
-    "retry": "إعادة المحاولة"
+    "retry": "إعادة المحاولة",
+    "description": "دراسات وموارد كتابية."
   },
   "notifications": {
     "title": "الإشعارات",
@@ -62,7 +170,8 @@
     "emptyFiltered": "لا توجد إشعارات في هذا التصنيف",
     "error": "تعذّر تحميل الإشعارات. تحقّق من اتصالك وحاول مرة أخرى.",
     "retry": "إعادة المحاولة",
-    "loadMore": "تحميل المزيد"
+    "loadMore": "تحميل المزيد",
+    "description": "إشعارات الاجتماع."
   },
   "install": {
     "dialogLabel": "تثبيت تطبيق إحنا شباب المسيح",

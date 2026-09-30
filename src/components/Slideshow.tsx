@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useCallback, useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 type Photo = { id: string; url: string; width: number; height: number };
 
@@ -13,6 +14,7 @@ export default function Slideshow({
   startIndex: number;
   onClose: () => void;
 }) {
+  const t = useTranslations("gallery");
   const [index, setIndex] = useState(startIndex);
   const [playing, setPlaying] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -52,13 +54,15 @@ export default function Slideshow({
       onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3">
-        <span className="text-sm text-white/60">{index + 1} / {photos.length}</span>
+        <span className="text-sm text-white/60">
+          {t("counter", { index: index + 1, total: photos.length })}
+        </span>
         <div className="flex gap-3">
           <button onClick={() => setPlaying((p) => !p)}
             className="rounded-full bg-white/10 px-3 py-1 text-xs text-white">
-            {playing ? "⏸ Pause" : "▶ Play"}
+            {playing ? `⏸ ${t("pause")}` : `▶ ${t("play")}`}
           </button>
-          <button onClick={onClose} className="text-white/80 text-xl">✕</button>
+          <button onClick={onClose} aria-label={t("close")} className="text-white/80 text-xl">✕</button>
         </div>
       </div>
 
@@ -68,11 +72,11 @@ export default function Slideshow({
       </div>
 
       {/* Prev / Next */}
-      <button onClick={prev}
+      <button onClick={prev} aria-label={t("previousPhoto")}
         className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-3 text-white text-xl">
         ‹
       </button>
-      <button onClick={next}
+      <button onClick={next} aria-label={t("nextPhoto")}
         className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-3 text-white text-xl">
         ›
       </button>

@@ -1,12 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { siteConfig, themeConfig } from "@/config";
+import { localizedValue } from "@/lib/localized";
+import { DEFAULT_LOCALE } from "@/i18n/locales";
 
 const { pwaIcons } = siteConfig.assets;
 
+/**
+ * Root layout metadata.
+ *
+ * This is only a FALLBACK for routes that render outside `[locale]` (the
+ * empty `/` page, the standalone `/checkin` and `/admin` subtrees, which each
+ * provide their own <html>). Every localized page under `[locale]/…` exports
+ * `generateMetadata()` from `@/i18n/metadata`, so /en/… and /ar/… get their
+ * own title, description, canonical URL and hreflang alternates.
+ */
 export const metadata: Metadata = {
-  title: siteConfig.name,
-  description: siteConfig.description.en,
+  title: localizedValue(siteConfig.name, DEFAULT_LOCALE),
+  description: localizedValue(siteConfig.description, DEFAULT_LOCALE),
   /** Single authoritative manifest (see `src/app/manifest.ts`). */
   manifest: "/manifest.webmanifest",
   /**

@@ -1,7 +1,13 @@
+import { localized } from "@/lib/localized";
+
 /**
  * Site configuration — shared identity used across the whole site
  * (metadata, PWA manifest, hero, contact page, push notifications).
  * Meeting-specific content (name, schedule, about text) lives in `meeting.ts`.
+ *
+ * Every user-visible string is a `LocalizedText` (an explicit `{ ar, en }`
+ * pair). Both languages are written side by side so a gap is obvious when the
+ * data is read, rather than surfacing as the wrong language at runtime.
  */
 export interface SocialLink {
   /** Network name — also used to pick the icon (see `SocialLinks.tsx`). */
@@ -11,14 +17,14 @@ export interface SocialLink {
 
 export const siteConfig = {
   /** Full site/meeting title (browser tabs, PWA manifest name). */
-  name: "Youth For Christ Meeting",
-  /** Short name (installed-app title, admin pages). */
+  name: localized("إحنا شباب المسيح", "Youth For Christ Meeting"),
+  /** Short name (installed-app title, admin pages) — brand name, not translated. */
   shortName: "Youth For Christ",
   /** Site description (SEO metadata + PWA manifest). */
-  description: {
-    en: "Youth For Christ Meeting – Christ Church Ezbet El Nakhl",
-    ar: "إحنا شباب المسيح · كنيسة المسيح – عزبة النخل",
-  },
+  description: localized(
+    "إحنا شباب المسيح · كنيسة المسيح – عزبة النخل",
+    "Youth For Christ Meeting – Christ Church Ezbet El Nakhl"
+  ),
   /**
    * Public site URL — base for push-notification click-through links.
    * Override with NEXT_PUBLIC_SITE_URL (set it in production so notification
@@ -28,8 +34,7 @@ export const siteConfig = {
 
   /** The church this meeting belongs to. */
   church: {
-    name: "Christ Church – Ezbet El Nakhl",
-    nameAr: "كنيسة المسيح – عزبة النخل",
+    name: localized("كنيسة المسيح – عزبة النخل", "Christ Church – Ezbet El Nakhl"),
   },
 
   /**

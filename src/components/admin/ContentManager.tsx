@@ -629,7 +629,10 @@ export default function ContentManager({ password }: { password: string }) {
         ) : (
           <div className="flex flex-col gap-2">
             {visible.map((item) => {
-              const reference = referenceLabel(referenceFromItem(item), false);
+              // The admin panel is an English-only internal tool
+              // (see src/app/admin/layout.tsx), so it always renders the
+              // English variant of every label.
+              const reference = referenceLabel(referenceFromItem(item), "en");
               const category = item.category
                 ? categoriesFor(item.type).find((preset) => preset.id === item.category)?.en ?? item.category
                 : null;

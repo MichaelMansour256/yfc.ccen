@@ -1,11 +1,16 @@
 "use client";
-
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 /**
- * Explicit push opt-in bell. Lives in the More page so users can
+ * Explicit push opt-in bell. Lives on the More page so users can
  * (re)subscribe on demand — survives token expiry, SW migrations, and
  * dismissed prompts without nagging.
+ *
+ * The copy comes from the `push` message namespace (it used to be inline
+ * `isAr ? "…" : "…"` ternaries driven by a `locale` PROP, a second source of
+ * truth that could disagree with the URL). It renders nothing itself; all
+ * locale comes from next-intl.
  *
  * States:
  *  - unsupported: no Notification API (old browser / in-app webview)
@@ -15,8 +20,8 @@ import { useEffect, useState } from "react";
  */
 type BellState = "loading" | "unsupported" | "blocked" | "on" | "off";
 
-export default function PushBell({ locale }: { locale: string }) {
-  const isAr = locale === "ar";
+export default function PushBell() {
+  const t = useTranslations("push");
   const [state, setState] = useState<BellState>("loading");
   const [busy, setBusy] = useState(false);
   const [subId, setSubId] = useState<string | null>(null);
@@ -99,7 +104,7 @@ export default function PushBell({ locale }: { locale: string }) {
       <div className={box}>
         <span className="text-2xl">🔔</span>
         <span className="text-base font-semibold text-white">
-          {isAr ? "الإشعارات" : "Notifications"}
+          {t("title")}
         </span>
         <span className="ms-auto text-sm text-blue-light/50">…</span>
       </div>
@@ -112,12 +117,10 @@ export default function PushBell({ locale }: { locale: string }) {
         <span className="text-2xl">🔕</span>
         <div>
           <p className="text-base font-semibold text-white">
-            {isAr ? "الإشعارات غير مدعومة" : "Notifications not supported"}
+            {t("unsupported")}
           </p>
           <p className="text-xs text-blue-light/60">
-            {isAr
-              ? "افتح الموقع في كروم أو سفاري لتفعيل الإشعارات"
-              : "Open in Chrome or Safari to enable notifications"}
+            {t("unsupportedHint")}
           </p>
         </div>
       </div>
@@ -130,12 +133,10 @@ export default function PushBell({ locale }: { locale: string }) {
         <span className="text-2xl">🚫</span>
         <div>
           <p className="text-base font-semibold text-white">
-            {isAr ? "الإشعارات محظورة" : "Notifications blocked"}
+            {t("blocked")}
           </p>
           <p className="text-xs text-blue-light/60">
-            {isAr
-              ? "افتح ⚙️ إعدادات المتصفح ← الإشعارات ← سماح، ثم ارجع هنا"
-              : "Open browser settings → Notifications → Allow, then come back"}
+            {t("blockedHint")}
           </p>
         </div>
       </div>
@@ -148,14 +149,14 @@ export default function PushBell({ locale }: { locale: string }) {
       <span className="flex-1">
         <span className="block text-base font-semibold text-white">
           {state === "on"
-            ? isAr ? "الإشعارات مفعّلة ✅" : "Notifications on ✅"
+            ? t("on")
             : busy
-              ? isAr ? "جاري التفعيل…" : "Enabling…"
-              : isAr ? "فعّل إشعارات الاجتماع 🔔" : "Enable meeting notifications 🔔"}
+              ? t("enabling")
+              : t("enable")}
         </span>
         {state !== "on" && (
           <span className="block text-xs text-blue-light/60">
-            {isAr ? "اضغط للتفعيل — ستصلك الدعوة وآية الأسبوع" : "Tap to enable — get the invite & verse of the week"}
+            {t("enableHint")}
           </span>
         )}
         {state === "on" && subId && (

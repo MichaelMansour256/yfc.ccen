@@ -1,36 +1,35 @@
+import { localized } from "@/lib/localized";
+
 /**
  * Meeting information — WHO this website is for.
  * (Church identity, contact info, social links and assets live in `site.ts`.)
  *
  * All display strings are stored with their exact current values so the
- * rendered UI is unchanged.
+ * rendered UI is unchanged, and each is an explicit `LocalizedText`
+ * (`{ ar, en }`) so a page reads the language it was asked for instead of
+ * reaching for a hard-coded `*Ar` field.
  */
 export const meetingConfig = {
-  /** Meeting name (Arabic). */
-  name: "إحنا شباب المسيح",
-  /** Meeting name (English). */
-  nameEn: "Youth For Christ Meeting",
-  /** Short display name (installed PWA title, admin pages). */
+  /** Meeting name. */
+  name: localized("إحنا شباب المسيح", "Youth For Christ Meeting"),
+  /** Short display name (installed PWA title, admin pages) — brand, not translated. */
   shortName: "Youth For Christ",
   /** Age group / stage the meeting serves. */
-  ageGroup: "شباب (Youth)",
+  ageGroup: localized("شباب (Youth)", "Youth"),
 
   /** One-line tagline (used on the contact page). */
-  tagline: {
-    ar: "إحنا شباب المسيح",
-    en: "Youth For Christ Meeting",
-  },
+  tagline: localized("إحنا شباب المسيح", "Youth For Christ Meeting"),
 
   /** Home page hero texts. */
   hero: {
-    welcome: {
-      ar: "أهلاً بيكم في اجتماع شباب المسيح",
-      en: "Youth For Christ Meeting",
-    },
-    subtitle: {
-      ar: "إحنا شباب المسيح · كنيسة المسيح – عزبة النخل",
-      en: "Youth For Christ Meeting · Christ Church – Ezbet El Nakhl",
-    },
+    welcome: localized(
+      "أهلاً بيكم في اجتماع شباب المسيح",
+      "Welcome to the Youth For Christ meeting"
+    ),
+    subtitle: localized(
+      "إحنا شباب المسيح · كنيسة المسيح – عزبة النخل",
+      "Youth For Christ Meeting · Christ Church – Ezbet El Nakhl"
+    ),
   },
 
   /**
@@ -38,30 +37,27 @@ export const meetingConfig = {
    * `weekday` drives the countdown, the events date-strip highlight and the
    * invitation lookups (0 = Sunday … 6 = Saturday). `time` is HH:MM 24h and
    * feeds the countdown target and the admin event form default.
-   * The `label*` fields are the exact strings shown in the UI / notifications.
+   * The `label` / `dayName` / `timeLabel` fields are the exact strings shown in
+   * the UI and in push notifications.
    */
   schedule: {
   weekday: 5, // Friday
   time: "18:30",
   /** Weekly-meeting card line. */
-  labelAr: "كل جمعة · ٦:٣٠ م",
-  labelEn: "Every Friday · 6:30 PM",
+    label: localized("كل جمعة · ٦:٣٠ م", "Every Friday · 6:30 PM"),
   /** Reminder/push text building blocks. */
-  dayNameAr: "الجمعة",
-  dayNameEn: "Friday",
-  timeLabelAr: "٦:٣٠",
-  timeLabelEn: "6:30 PM",
-},
+    dayName: localized("الجمعة", "Friday"),
+    timeLabel: localized("٦:٣٠ م", "6:30 PM"),
+  },
 
   /** Meeting location (the church itself lives in `siteConfig.church`). */
   location: {
-    name: "كنيسة المسيح – عزبة النخل",
-    nameEn: "Christ Church – Ezbet El Nakhl",
+    name: localized("كنيسة المسيح – عزبة النخل", "Christ Church – Ezbet El Nakhl"),
   },
 
   /** "About" page content. */
   about: {
-    title: { ar: "من نحن", en: "About Us" },
+    title: localized("من نحن", "About Us"),
     paragraphs: {
       ar: [
         "إحنا اجتماع شباب المسيح في كنيسة المسيح – عزبة النخل، بنجتمع علشان نكبر مع بعض في علاقتنا بربنا، نفهم كلمته أكتر، ونعيش إيماننا بشكل حقيقي في حياتنا اليومية.",
@@ -75,27 +71,27 @@ export const meetingConfig = {
     pillars: [
       {
         icon: "✝️",
-        title: { ar: "إيمان", en: "Faith" },
-        desc: {
-          ar: "نقرب من ربنا، ونعرفه أكتر، ونفهم كلمته ونكتشف إزاي نعيشها.",
-          en: "Drawing closer to God, knowing Him more, understanding His word and discovering how to live it out.",
-        },
+        title: localized("إيمان", "Faith"),
+        desc: localized(
+          "نقرب من ربنا، ونعرفه أكتر، ونفهم كلمته ونكتشف إزاي نعيشها.",
+          "Drawing closer to God, knowing Him more, understanding His word and discovering how to live it out."
+        ),
       },
       {
         icon: "🤝",
-        title: { ar: "أصحاب", en: "Friends" },
-        desc: {
-          ar: "نبني مجتمع حقيقي نقدر نكون فيه على طبيعتنا، ونفرح ونساعد بعض ونكبر سوا.",
-          en: "Building a real community where we can be ourselves, share joy, support each other and grow together.",
-        },
+        title: localized("أصحاب", "Friends"),
+        desc: localized(
+          "نبني مجتمع حقيقي نقدر نكون فيه على طبيعتنا، ونفرح ونساعد بعض ونكبر سوا.",
+          "Building a real community where we can be ourselves, share joy, support each other and grow together."
+        ),
       },
       {
         icon: "🌱",
-        title: { ar: "نمو", en: "Growth" },
-        desc: {
-          ar: "كل واحد فينا في رحلة، وهدفنا إننا نتقدم خطوة كل يوم في علاقتنا بربنا وبالناس حوالينا.",
-          en: "Each of us is on a journey — our goal is to take one step forward every day in our relationship with God and the people around us.",
-        },
+        title: localized("نمو", "Growth"),
+        desc: localized(
+          "كل واحد فينا في رحلة، وهدفنا إننا نتقدم خطوة كل يوم في علاقتنا بربنا وبالناس حوالينا.",
+          "Each of us is on a journey — our goal is to take one step forward every day in our relationship with God and the people around us."
+        ),
       },
     ],
   },

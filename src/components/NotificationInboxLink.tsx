@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { getReadNotificationIds, subscribeToReadChanges } from "@/lib/notification-read-state";
 import { peekSubscriberId, resolveSubscriberId } from "@/lib/onesignal-subscriber";
 
@@ -21,7 +21,6 @@ const BADGE_FETCH_LIMIT = 30;
 
 export default function NotificationInboxLink() {
   const t = useTranslations("notifications");
-  const locale = useLocale();
   const [unread, setUnread] = useState<number | null>(null);
 
   const recompute = useCallback(async () => {
@@ -82,7 +81,7 @@ export default function NotificationInboxLink() {
   }, [recompute]);
 
   return (
-    <Link href={`/${locale}/more/notifications`}
+    <Link href="/more/notifications"
       className="flex items-center gap-4 rounded-2xl border border-blue-mid/40 bg-blue-primary/40 p-4 backdrop-blur-sm transition hover:bg-blue-mid/50 active:scale-95">
       <span className="text-2xl">🔔</span>
       <span className="text-base font-semibold text-white">{t("title")}</span>

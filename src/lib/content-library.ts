@@ -17,6 +17,7 @@
  * (book, chapter, verse) and the resource → study link are OPTIONAL.
  */
 import { BIBLE_BOOKS } from "./bibleBooks";
+import type { AppLocale } from "@/i18n/locales";
 
 /** The two content types stored in `content_library.type`. */
 export type ContentKind = "study" | "resource";
@@ -142,32 +143,44 @@ export function bibleBookNameAr(nr: number): string | null {
 }
 
 /** Localized book name for a BIBLE_BOOKS `nr` (1..66). */
-export function bibleBookLabel(nr: number | null | undefined, isAr: boolean): string | null {
+export function bibleBookLabel(nr: number | null | undefined, locale: AppLocale): string | null {
   if (!nr || nr < 1 || nr > 66) return null;
-  if (isAr) return bibleBookNameAr(nr);
+  if (locale === "ar") return bibleBookNameAr(nr);
   return BIBLE_BOOK_NAMES_EN[nr - 1] ?? null;
 }
 
 /** "Study" / "Resource" in the active language. */
-export function contentTypeLabel(kind: ContentKind, isAr: boolean): string {
-  if (kind === "study") return isAr ? "دراسة" : "Study";
-  return isAr ? "مورد" : "Resource";
+export function contentTypeLabel(kind: ContentKind, locale: AppLocale): string {
+  if (kind === "study") return locale === "ar" ? "دراسة" : "Study";
+  return locale === "ar" ? "مورد" : "Resource";
 }
 
-/** Arabic title is primary; the English one is shown only when it was filled in. */
-export function contentTitle(item: ContentItem, isAr: boolean): string {
-  if (!isAr) return item.title_en?.trim() || item.title;
-  return item.title;
+/**
+ * Title in the active language.
+ *
+ * The English title is only used when a servant actually filled in
+ * `title_en`; otherwise the Arabic title is used as an EXPLICIT fallback,
+ * because `title` is the primary column in `content_library` and an
+ * untranslated row has no other value. Callers that must not show a
+ * cross-language fallback use `contentTitleOrNull`.
+ */
+export function contentTitle(item: ContentItem, locale: AppLocale): string {
+  return contentTitleOrNull(item, locale) ?? item.title;
 }
 
-export function contentDescription(item: ContentItem, isAr: boolean): string | null {
-  const value = isAr ? item.description : item.description_en?.trim() || item.description;
+export function contentTitleOrNull(item: ContentItem, locale: AppLocale): string | null {
+  const value = locale === "ar" ? item.title : item.title_en;
   return value?.trim() ? value : null;
 }
 
-function presetLabel(preset: ContentPreset | undefined, isAr: boolean): string | null {
+export function contentDescription(item: ContentItem, locale: AppLocale): string | null {
+  const value = locale === "ar" ? item.description : item.description_en;
+  return value?.trim() ? value : null;
+}
+
+function presetLabel(preset: ContentPreset | undefined, locale: AppLocale): string | null {
   if (!preset) return null;
-  return isAr ? preset.ar : preset.en;
+  return locale === "ar" ? preset.ar : preset.en;
 }
 
 /**
@@ -178,36 +191,42 @@ function presetLabel(preset: ContentPreset | undefined, isAr: boolean): string |
 export function categoryDisplay(
   value: string | null | undefined,
   kind: ContentKind,
-  isAr: boolean
+  locale: AppLocale
 ): { label: string; icon: string } | null {
   const raw = value?.trim();
   if (!raw) return null;
   const list = kind === "study" ? STUDY_CATEGORIES : RESOURCE_CATEGORIES;
   const preset = list.find((p) => p.id === raw);
-  return { label: presetLabel(preset, isAr) ?? raw, icon: preset?.icon ?? "🏷️" };
+  return { label: presetLabel(preset, locale) ?? raw, icon: preset?.icon ?? "🏷️" };
 }
 
 /** Format chip + call-to-action for a resource ("PDF", "🎬 Watch video"). */
 export function resourceTypeDisplay(
   item: ContentItem,
-  isAr: boolean
+  locale: AppLocale
 ): { id: string; label: string; icon: string; action: string } {
   const preset = RESOURCE_TYPES.find((p) => p.id === item.resource_type);
+  const fallbackAction = locale === "ar" ? "فتح" : "Open";
   if (!preset) {
-    return { id: "other", label: isAr ? "مادة" : "Material", icon: "📎", action: isAr ? "فتح" : "Open" };
+    return {
+      id: "other",
+      label: locale === "ar" ? "مادة" : "Material",
+      icon: "📎",
+      action: fallbackAction,
+    };
   }
   return {
     id: preset.id,
-    label: presetLabel(preset, isAr) ?? preset.id,
+    label: presetLabel(preset, locale) ?? preset.id,
     icon: preset.icon,
-    action: (isAr ? preset.actionAr : preset.actionEn) ?? (isAr ? "فتح" : "Open"),
+    action: (locale === "ar" ? preset.actionAr : preset.actionEn) ?? fallbackAction,
   };
 }
 
 /** Label of the card's main button ("فتح الدراسة" for studies, type-aware for resources). */
-export function contentActionLabel(item: ContentItem, isAr: boolean): string {
-  if (item.type === "study") return isAr ? "فتح الدراسة" : "Open study";
-  return resourceTypeDisplay(item, isAr).action;
+export function contentActionLabel(item: ContentItem, locale: AppLocale): string {
+  if (item.type === "study") return locale === "ar" ? "فتح الدراسة" : "Open study";
+  return resourceTypeDisplay(item, locale).action;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -263,11 +282,11 @@ export function referenceFromItem(item: ContentItem): BibleReference | null {
  */
 export function referenceLabel(
   ref: BibleReference | null | undefined,
-  isAr: boolean,
+  locale: AppLocale,
   includeVerse = true
 ): string | null {
   if (!hasReference(ref)) return null;
-  const name = bibleBookLabel(ref.book, isAr);
+  const name = bibleBookLabel(ref.book, locale);
   if (!name) return null;
   let label = name;
   if (ref.chapter) {
@@ -308,13 +327,17 @@ export function relatedItems(
   return items.filter((item) => item.type === kind && matchesReference(item, ref));
 }
 
-/** URL of a section filtered by a Bible reference (deep link, shareable). */
+// URL of a section filtered by a Bible reference (deep link, shareable).
+//
+// The path is locale-RELATIVE on purpose: it is handed to the locale-aware
+// <Link> from `@/i18n/navigation`, which adds the active prefix. Building the
+// prefix in here (the old `/${locale}/bible/...`) is what allowed a card on an
+// English page to link back into the Arabic app.
 export function referenceHref(
-  locale: string,
   section: "studies" | "resources",
   ref: BibleReference | null | undefined
 ): string {
-  const base = `/${locale}/bible/${section}`;
+  const base = `/bible/${section}`;
   if (!hasReference(ref)) return base;
   const params = new URLSearchParams({ book: String(ref.book) });
   if (ref.chapter) params.set("chapter", String(ref.chapter));

@@ -6,6 +6,7 @@ import {
   nextFridayCairoISO,
 } from "@/lib/invitations";
 import { meetingConfig, siteConfig } from "@/config";
+import { localizedValue } from "@/lib/localized";
 import { routing } from "@/i18n/routing";
 
 export async function GET(req: Request) {
@@ -24,14 +25,23 @@ export async function GET(req: Request) {
     const match = invitations.find((i) => i.date === nextFriday);
 
     const { schedule } = meetingConfig;
-    const headingAr = `دعوة اجتماع ${schedule.dayNameAr} ✝️`;
-    const headingEn = `${schedule.dayNameEn} Meeting Invitation ✝️`;
+    // OneSignal sends `headings`/`contents` per device language, so both the
+    // Arabic and the English text are built here from the same config values.
+    const dayNameAr = localizedValue(schedule.dayName, "ar");
+    const dayNameEn = localizedValue(schedule.dayName, "en");
+    const timeLabelAr = localizedValue(schedule.timeLabel, "ar");
+    const timeLabelEn = localizedValue(schedule.timeLabel, "en");
+    const churchAr = localizedValue(siteConfig.church.name, "ar");
+    const churchEn = localizedValue(siteConfig.church.name, "en");
+
+    const headingAr = `دعوة اجتماع ${dayNameAr} ✝️`;
+    const headingEn = `${dayNameEn} Meeting Invitation ✝️`;
     const messageAr = match
-      ? `دعوة اجتماع ${schedule.dayNameAr} ${match.date} — الساعة ${schedule.timeLabelAr} — ${siteConfig.church.nameAr} 🙏`
-      : `اجتماع ${schedule.dayNameAr} غداً — الساعة ${schedule.timeLabelAr} — ${siteConfig.church.nameAr} 🙏`;
+      ? `دعوة اجتماع ${dayNameAr} ${match.date} — الساعة ${timeLabelAr} — ${churchAr} 🙏`
+      : `اجتماع ${dayNameAr} غداً — الساعة ${timeLabelAr} — ${churchAr} 🙏`;
     const messageEn = match
-      ? `${schedule.dayNameEn} meeting invitation ${match.date} — ${schedule.timeLabelEn} — ${siteConfig.church.name} 🙏`
-      : `${schedule.dayNameEn} meeting is tomorrow at ${schedule.timeLabelEn} — ${siteConfig.church.name} 🙏`;
+      ? `${dayNameEn} meeting invitation ${match.date} — ${timeLabelEn} — ${churchEn} 🙏`
+      : `${dayNameEn} meeting is tomorrow at ${timeLabelEn} — ${churchEn} 🙏`;
     const url = `/${routing.defaultLocale}/events`;
 
     const result = await sendNotification({

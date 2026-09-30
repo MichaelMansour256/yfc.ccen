@@ -1,13 +1,20 @@
+import type { Metadata } from "next";
 import { useTranslations, useLocale } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
 import SocialLinks from "@/components/SocialLinks";
 import { meetingConfig, siteConfig, homeQuickLinks, isFeatureEnabled } from "@/config";
+import { Link } from "@/i18n/navigation";
+import { localizedValue } from "@/lib/localized";
+import { toAppLocale } from "@/i18n/locales";
+import { buildMetadata } from "@/i18n/metadata";
+
+export function generateMetadata(): Promise<Metadata> {
+  return buildMetadata("metadata");
+}
 
 export default function HomePage() {
   const tNav = useTranslations("nav");
-  const locale = useLocale();
-  const isAr = locale === "ar";
+  const locale = toAppLocale(useLocale());
 
   const quickLinks = homeQuickLinks.filter((l) => isFeatureEnabled(l.feature));
 
@@ -42,10 +49,10 @@ export default function HomePage() {
         {/* Text */}
         <div className="animate-fade-up-delay flex flex-col items-center gap-1">
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">
-            {isAr ? meetingConfig.hero.welcome.ar : meetingConfig.hero.welcome.en}
+            {localizedValue(meetingConfig.hero.welcome, locale)}
           </h1>
           <p className="text-sm text-blue-light/70 max-w-xs leading-relaxed">
-            {isAr ? meetingConfig.hero.subtitle.ar : meetingConfig.hero.subtitle.en}
+            {localizedValue(meetingConfig.hero.subtitle, locale)}
           </p>
         </div>
 
@@ -65,7 +72,7 @@ export default function HomePage() {
       {/* Quick nav grid */}
       <div className="animate-fade-up-delay-2 relative z-10 grid w-full max-w-sm grid-cols-2 gap-3 px-5 pb-4">
         {quickLinks.map(({ key, href, icon }) => (
-          <Link key={key} href={`/${locale}${href}`}
+          <Link key={key} href={href}
             className="group flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-5 text-center backdrop-blur-md transition hover:bg-white/10 hover:border-blue-accent/40 active:scale-95">
             <span className="text-4xl transition group-hover:scale-110">{icon}</span>
             <span className="text-sm font-semibold text-white/90">{tNav(key)}</span>

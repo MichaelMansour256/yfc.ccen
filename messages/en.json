@@ -6,23 +6,24 @@
     "games": "Games",
     "more": "More"
   },
-  "events": {
-    "title": "Events",
-    "upcoming": "Upcoming",
-    "past": "Past Events"
-  },
   "bible": {
     "title": "Bible",
     "verseOfWeek": "Verse of the Week",
     "studies": "Studies",
-    "resources": "Resources"
+    "resources": "Resources",
+    "description": "Bible studies, resources and the verse of the week."
   },
   "games": {
     "title": "Games",
     "holyWordle": "HolyWordle",
     "crossword": "Crossword",
     "whoAmI": "Who Am I?",
-    "emojiBible": "Emoji Bible"
+    "emojiBible": "Emoji Bible",
+    "verseUpSubtitle": "Bible verse challenge game",
+    "verseUpCta": "Play Now ▶",
+    "verseUpBack": "Back",
+    "verseUpTitle": "Verse Up Arena",
+    "description": "Bible games from the Youth For Christ meeting."
   },
   "more": {
     "title": "More",
@@ -30,9 +31,111 @@
     "gallery": "Gallery",
     "servants": "Servants",
     "prayerWall": "Prayer Wall",
-    "contact": "Contact"
+    "contact": "Contact",
+    "description": "More from the Youth For Christ meeting."
+  },
+  "servants": {
+    "title": "Servants",
+    "photoAlt": "Photo of {name}",
+    "description": "The servants of the Youth For Christ meeting."
+  },
+  "contact": {
+    "title": "Contact",
+    "followUs": "Follow Us",
+    "openLink": "Open {name} in a new tab",
+    "description": "Find and contact the Youth For Christ meeting."
+  },
+  "gallery": {
+    "title": "Gallery",
+    "all": "All",
+    "playSlideshow": "Play Slideshow ({count} photos)",
+    "loading": "Loading…",
+    "noPhotos": "No photos yet",
+    "play": "Play",
+    "pause": "Pause",
+    "close": "Close",
+    "counter": "{index} / {total}",
+    "previousPhoto": "Previous photo",
+    "nextPhoto": "Next photo",
+    "description": "Photos from the Youth For Christ meeting."
+  },
+  "verse": {
+    "title": "Verse of the Week",
+    "loading": "Loading…",
+    "empty": "No verse of the week has been set yet",
+    "translation": "Van Dyck translation",
+    "note": "Note",
+    "weekOf": "Verse of the week · {month}",
+    "verseAlt": "{reference}",
+    "description": "The verse of the week from the Youth For Christ meeting."
+  },
+  "prayerWall": {
+    "title": "Prayer Wall",
+    "thankYou": "Thank you! Your request is under review",
+    "underReview": "It will appear after servant approval",
+    "addAnother": "Add another",
+    "formTitle": "✝️ Share a Prayer Request",
+    "namePlaceholder": "Your name (optional)",
+    "requestPlaceholder": "Write your prayer request here…",
+    "send": "Send Request 🙏",
+    "loading": "Loading…",
+    "empty": "No prayer requests yet",
+    "pray": "Pray",
+    "requestAlt": "Prayer request from {name}",
+    "description": "Share a prayer request with the Youth For Christ meeting."
+  },
+  "weeklyMeeting": {
+    "title": "Weekly Meeting",
+    "today": "Today!",
+    "next": "Next:",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Mins",
+    "seconds": "Secs"
+  },
+  "push": {
+    "title": "Notifications",
+    "loading": "Notifications",
+    "unsupported": "Notifications not supported",
+    "unsupportedHint": "Open in Chrome or Safari to enable notifications",
+    "blocked": "Notifications blocked",
+    "blockedHint": "Open browser settings → Notifications → Allow, then come back",
+    "on": "Notifications on ✅",
+    "enabling": "Enabling…",
+    "enable": "Enable meeting notifications 🔔",
+    "enableHint": "Tap to enable — get the invite & verse of the week"
+  },
+  "events": {
+    "title": "Events",
+    "upcoming": "Upcoming",
+    "past": "Past Events",
+    "loading": "Loading…",
+    "invitationHistory": "Invitation History",
+    "noEvents": "No events yet",
+    "invitationAlt": "Meeting invitation",
+    "eventAlt": "Event image",
+    "description": "Upcoming meetings and special events."
+  },
+  "about": {
+    "title": "About Us",
+    "churchFooter": "{church}",
+    "description": "About the Youth For Christ meeting at Christ Church Ezbet El Nakhl."
+  },
+  "metadata": {
+    "title": "Youth For Christ Meeting",
+    "description": "Youth For Christ Meeting – Christ Church Ezbet El Nakhl",
+    "homeTitle": "Home",
+    "servantsTitle": "Servants",
+    "contactTitle": "Contact",
+    "galleryTitle": "Gallery",
+    "aboutTitle": "About Us",
+    "prayerWallTitle": "Prayer Wall",
+    "notificationsTitle": "Notifications",
+    "verseTitle": "Verse of the Week",
+    "gamesTitle": "Games"
   },
   "content": {
+    "title": "Studies & Resources",
     "searchPlaceholder": "Search by title…",
     "allCategories": "All categories",
     "allTypes": "All types",
@@ -44,13 +147,18 @@
     "relatedResources": "Related Resources",
     "relatedStudy": "Related study",
     "openInNewTab": "Opens in a new tab",
+    "showForSection": "Show {section} for {reference}",
+    "openRelatedStudy": "Open the related study",
+    "sectionStudies": "studies",
+    "sectionResources": "resources",
     "emptyStudies": "No studies published yet",
     "emptyResources": "No resources published yet",
     "noResults": "No matching results",
     "clearFilters": "Clear all filters",
     "loading": "Loading…",
     "error": "Couldn't load the content",
-    "retry": "Retry"
+    "retry": "Retry",
+    "description": "Bible studies and resources."
   },
   "notifications": {
     "title": "Notifications",
@@ -62,7 +170,8 @@
     "emptyFiltered": "No notifications in this filter",
     "error": "Couldn't load notifications. Check your connection and try again.",
     "retry": "Retry",
-    "loadMore": "Load more"
+    "loadMore": "Load more",
+    "description": "Your meeting notifications."
   },
   "install": {
     "dialogLabel": "Install the Youth For Christ app",

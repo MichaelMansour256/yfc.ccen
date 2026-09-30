@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteConfig, themeConfig } from "@/config";
+import { localizedValue } from "@/lib/localized";
+import { DEFAULT_LOCALE } from "@/i18n/locales";
 
 /**
  * Dynamic PWA manifest generated from the site/theme configuration.
@@ -19,11 +21,15 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     /** Stable web-app identity, resolved against the manifest URL. */
     id: "/",
-    name: siteConfig.name,
+    /**
+     * The PWA manifest is a single, app-level document with no locale in its
+     * URL, so it advertises the DEFAULT locale (Arabic) — the same convention
+     * as `routing.defaultLocale` and `start_url`.
+     */
+    name: localizedValue(siteConfig.name, DEFAULT_LOCALE),
     short_name: siteConfig.shortName,
-    description: siteConfig.description.ar,
-    /** Primary app locale (the site defaults to Arabic) + direction. */
-    lang: "ar",
+    description: localizedValue(siteConfig.description, DEFAULT_LOCALE),
+    lang: DEFAULT_LOCALE,
     dir: "rtl",
     start_url: "/",
     scope: "/",

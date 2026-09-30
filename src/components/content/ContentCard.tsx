@@ -1,6 +1,7 @@
 "use client";
-import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { toAppLocale } from "@/i18n/locales";
 import {
   categoryDisplay,
   contentActionLabel,
@@ -41,17 +42,16 @@ export default function ContentCard({
   allItems: ContentItem[];
   showReferenceLink?: boolean;
 }) {
-  const locale = useLocale();
-  const isAr = locale === "ar";
+  const locale = toAppLocale(useLocale());
   const t = useTranslations("content");
 
-  const title = contentTitle(item, isAr);
-  const description = contentDescription(item, isAr);
-  const action = contentActionLabel(item, isAr);
-  const category = categoryDisplay(item.category, item.type, isAr);
-  const format = item.type === "resource" ? resourceTypeDisplay(item, isAr) : null;
+  const title = contentTitle(item, locale);
+  const description = contentDescription(item, locale);
+  const action = contentActionLabel(item, locale);
+  const category = categoryDisplay(item.category, item.type, locale);
+  const format = item.type === "resource" ? resourceTypeDisplay(item, locale) : null;
   const reference = referenceFromItem(item);
-  const refLabel = referenceLabel(reference, isAr);
+  const refLabel = referenceLabel(reference, locale);
   const siblingSection = item.type === "study" ? "resources" : "studies";
 
   const relatedStudy = item.related_study_id
@@ -90,8 +90,11 @@ export default function ContentCard({
             )}
             {refLabel && showReferenceLink && reference && (
               <Link
-                href={referenceHref(locale, siblingSection, reference)}
-                title={isAr ? `شاهد ${siblingSection === "studies" ? "الدراسات" : "الموارد"} المتعلقة بـ ${refLabel}` : `Show ${siblingSection === "studies" ? "studies" : "resources"} for ${refLabel}`}
+                href={referenceHref(siblingSection, reference)}
+                title={t("showForSection", {
+                  section: siblingSection === "studies" ? t("sectionStudies") : t("sectionResources"),
+                  reference: refLabel,
+                })}
                 className="rounded-full bg-blue-accent/15 px-2.5 py-1 text-xs font-semibold text-blue-accent transition hover:bg-blue-accent/25"
               >
                 📖 {refLabel} ›
@@ -107,10 +110,10 @@ export default function ContentCard({
                 href={relatedStudy.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                title={isAr ? "افتح الدراسة المرتبطة" : "Open the related study"}
+                title={t("openRelatedStudy")}
                 className="rounded-full bg-yellow-400/10 px-2.5 py-1 text-xs text-yellow-300/90 transition hover:bg-yellow-400/20"
               >
-                📚 {t("relatedStudy")}: {contentTitle(relatedStudy, isAr)}
+                📚 {t("relatedStudy")}: {contentTitle(relatedStudy, locale)}
               </a>
             )}
           </div>

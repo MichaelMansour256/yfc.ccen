@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { BIBLE_BOOKS } from "@/lib/bibleBooks";
+import { toAppLocale } from "@/i18n/locales";
 import {
   RESOURCE_TYPES,
   bibleBookLabel,
@@ -49,8 +50,7 @@ export default function ContentLibrary({
   kind: ContentKind;
   initialReference?: BibleReference | null;
 }) {
-  const locale = useLocale();
-  const isAr = locale === "ar";
+  const locale = toAppLocale(useLocale());
   const t = useTranslations("content");
 
   const [items, setItems] = useState<ContentItem[]>([]);
@@ -106,11 +106,11 @@ export default function ContentLibrary({
     ];
     return [...new Set(ordered)]
       .map((value) => {
-        const display = categoryDisplay(value, kind, isAr);
+        const display = categoryDisplay(value, kind, locale);
         return display ? { value, ...display } : null;
       })
       .filter((option): option is { value: string; label: string; icon: string } => option !== null);
-  }, [kindItems, kind, isAr]);
+  }, [kindItems, kind, locale]);
 
   /** Format chips (Resources only) — again only the formats in use. */
   const formatOptions = useMemo(() => {
@@ -118,10 +118,10 @@ export default function ContentLibrary({
     const present = new Set(kindItems.map((item) => item.resource_type ?? "other"));
     return RESOURCE_TYPES.filter((preset) => present.has(preset.id)).map((preset) => ({
       value: preset.id,
-      label: isAr ? preset.ar : preset.en,
+      label: locale === "ar" ? preset.ar : preset.en,
       icon: preset.icon,
     }));
-  }, [kindItems, kind, isAr]);
+  }, [kindItems, kind, locale]);
 
   const visible = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -138,7 +138,7 @@ export default function ContentLibrary({
   }, [kindItems, reference, category, format, query]);
 
   const filtersActive = Boolean(query.trim() || category || format || hasReference(reference));
-  const referenceText = referenceLabel(reference, isAr);
+  const referenceText = referenceLabel(reference, locale);
 
   const applyReference = useCallback((book: string, chapter: string) => {
     setDraftBook(book);
@@ -270,7 +270,7 @@ export default function ContentLibrary({
                 <option value="">{t("anyBook")}</option>
                 {BIBLE_BOOKS.map((book) => (
                   <option key={book.nr} value={book.nr}>
-                    {bibleBookLabel(book.nr, isAr) ?? book.name}
+                    {bibleBookLabel(book.nr, locale) ?? book.name}
                   </option>
                 ))}
               </select>

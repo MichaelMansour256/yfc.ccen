@@ -1,5 +1,6 @@
 "use client";
 import { useLocale, useTranslations } from "next-intl";
+import { toAppLocale } from "@/i18n/locales";
 import ContentCard from "./ContentCard";
 import {
   referenceLabel,
@@ -36,7 +37,7 @@ export default function RelatedContent({
   allItems: ContentItem[];
   reference: BibleReference | null;
 }) {
-  const isAr = useLocale() === "ar";
+  const locale = toAppLocale(useLocale());
   const t = useTranslations("content");
 
   const items = relatedItems(allItems, kind, reference);
@@ -44,7 +45,7 @@ export default function RelatedContent({
 
   const heading = kind === "study" ? t("relatedStudies") : t("relatedResources");
   const icon = kind === "study" ? "📚" : "🗂️";
-  const refLabel = referenceLabel(reference, isAr);
+  const refLabel = referenceLabel(reference, locale);
 
   return (
     <section className="flex flex-col gap-3 rounded-2xl border border-blue-mid/30 bg-blue-dark/30 p-3">

@@ -1,15 +1,47 @@
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
 import BottomNav from "@/components/BottomNav";
 import OneSignalInit from "@/components/OneSignalInit";
 import InstallBanner from "@/components/InstallBanner";
 import { siteConfig, themeCssVars } from "@/config";
+import { getDirection, toAppLocale } from "@/i18n/locales";
+import { routing } from "@/i18n/routing";
+import LocaleGuard from "@/components/LocaleGuard";
 import { Cairo, Inter } from "next/font/google";
 
 const cairo = Cairo({ subsets: ["arabic"], weight: ["400", "600", "700"], variable: "--font-cairo", display: "swap" });
 const inter = Inter({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-inter", display: "swap" });
+
+/**
+ * Default metadata for every localized page.
+ *
+ * This is what stops the ROOT layout's single (default-locale) title from
+ * leaking into `/en/...`: because this layout declares `generateMetadata`,
+ * the title/description/canonical are resolved per locale here, and any page
+ * that exports its own `generateMetadata` simply overrides them.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations("metadata");
+  const languages = Object.fromEntries(
+    routing.locales.map((candidate) => [candidate, `/${candidate}`])
+  );
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      canonical: `/${locale}`,
+      languages: { ...languages, "x-default": `/${routing.defaultLocale}` },
+    },
+    openGraph: { title: t("title"), description: t("description"), locale },
+  };
+}
 
 export default async function LocaleLayout({
   children,
@@ -18,13 +50,21 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  if (!routing.locales.includes(locale as "en" | "ar")) notFound();
+  const { locale: rawLocale } = await params;
+  const locale = toAppLocale(rawLocale);
+
+  /**
+   * Defence in depth: a URL segment that is not a shipped locale is a 404
+   * rather than a silent fall back to the default. Falling back here is what
+   * would let `/de/more/servants` render the Arabic app.
+   */
+  if (locale !== rawLocale) notFound();
 
   const messages = await getMessages();
+  const dir = getDirection(locale);
 
   return (
-    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}
+    <html lang={locale} dir={dir}
       className={locale === "ar" ? cairo.variable : inter.variable}>
       <head>
         {/*
@@ -55,8 +95,9 @@ export default async function LocaleLayout({
         {/* OneSignal Web SDK v16 - next/script in component, init only after SDK loads */}
         <OneSignalInit />
         <NextIntlClientProvider messages={messages}>
+          <LocaleGuard />
           <main className="pb-safe min-h-dvh">{children}</main>
-          <BottomNav locale={locale} />
+          <BottomNav />
           <InstallBanner />
         </NextIntlClientProvider>
       </body>
