@@ -231,6 +231,37 @@ for (const suffix of SWITCH_CASES) {
   if (!okBad) failures.push(`/de/... was served as locale "${finalLang}", expected a 404`);
 }
 
+// ── No route may contain a DOUBLED locale prefix ───────────────────────────
+// Regression guard: the language switcher once produced "/en/ar/more/servants"
+// because an already-prefixed path was handed to the locale-aware router, which
+// prefixed it again. Any "/<locale>/<locale>/…" path must never serve a page.
+const DOUBLED = [
+  "/en/en/more/servants",
+  "/en/ar/more/servants",
+  "/ar/en/more/servants",
+  "/ar/ar/more/servants",
+  "/en/en",
+  "/ar/ar",
+  "/en/ar/events",
+  "/ar/en/bible/verse",
+];
+
+for (const path of DOUBLED) {
+  const res = await fetch(`${BASE}${path}`, { redirect: "follow" });
+  const html = await res.text();
+  const served = /<main[\s>]|<nav[\s>]/i.test(html);
+  const ok = !served;
+  rows.push({
+    route: path,
+    locale: "—",
+    result: ok ? "ok" : "FAIL",
+    detail: ok
+      ? `status=${res.status} — no page served (doubled prefix rejected)`
+      : `status=${res.status} but a page was served — doubled locale prefix!`,
+  });
+  if (!ok) failures.push(`doubled locale prefix served a page: ${path} (status=${res.status})`);
+}
+
 // ── Report ────────────────────────────────────────────────────────────────
 const pad = (v, n) => String(v).padEnd(n);
 console.log("\nROUTE AUDIT");

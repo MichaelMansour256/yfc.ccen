@@ -1,7 +1,7 @@
 "use client";
 import { useLocale, useTranslations } from "next-intl";
 import { bottomNavTabs, isFeatureEnabled } from "@/config";
-import { Link, getPathname, usePathname, useRouter } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { toAppLocale, otherLocale, localeLabel, localeFlag } from "@/i18n/locales";
 
 /**
@@ -25,18 +25,20 @@ export default function BottomNav() {
   /**
    * Switch language while STAYING ON THE SAME PAGE.
    *
-   * The old implementation did `pathname.replace(`/${locale}`, `/${next}`)`,
-   * which broke on any path that did not start with the expected segment and
-   * could replace the wrong occurrence. `getPathname` re-issues the current
-   * pathname for the target locale instead, so /ar/more/servants → 
-   * /en/more/servants and the user never lands on the home page.
+   * `usePathname()` from `@/i18n/navigation` is LOCALE-RELATIVE (on
+   * /en/more/servants it returns "/more/servants"), and `router.replace()`
+   * adds the prefix for the `locale` you pass it. Those two are designed to be
+   * used together.
+   *
+   * Do NOT pass `getPathname({ href, locale })` here: that helper returns an
+   * ALREADY-prefixed path ("/ar/more/servants"), so handing it to the router
+   * prefixed the URL twice and produced "/en/ar/more/servants" (404).
+   *
+   * The previous implementation was `pathname.replace(`/${locale}`, `/${next}`)`
+   * on the raw path, which could also replace the wrong occurrence.
    */
   function toggleLocale() {
-    const next = otherLocale(locale);
-    // Re-issue the CURRENT pathname for the other locale, so the user stays on
-    // the same page (/ar/more/servants → /en/more/servants) instead of being
-    // dropped on the home page.
-    router.replace(getPathname({ href: pathname, locale: next }));
+    router.replace(pathname, { locale: otherLocale(locale) });
   }
 
   return (

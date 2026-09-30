@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useLocale } from "next-intl";
-import { usePathname } from "@/i18n/navigation";
+import { usePathname } from "next/navigation";
 import { isAppLocale } from "@/i18n/locales";
 
 /**
@@ -11,11 +11,16 @@ import { isAppLocale } from "@/i18n/locales";
  * That happens whenever a component stops consulting the locale and reaches
  * for a hard-coded string or a `*Ar` config field instead.
  *
- * This component compares the locale segment in the URL with the locale
- * next-intl actually resolved, and warns loudly when they disagree — the
- * signal that something in the tree is rendering the wrong language.
+ * It compares the locale segment in the URL with the locale next-intl
+ * resolved, and warns loudly when they disagree.
  *
- * It renders `null` and does no work in production: no logging, no DOM, no
+ * NOTE the import: this uses `usePathname` from `next/navigation`, NOT from
+ * `@/i18n/navigation`. That is deliberate. The next-intl version returns a
+ * LOCALE-RELATIVE path ("/more/servants"), which has no locale segment to
+ * compare — using it here made the guard silently inert. For a diagnostic
+ * that inspects the raw URL, the raw URL is what we want.
+ *
+ * Renders `null` and does no work in production: no logging, no DOM, no
  * measurable cost. The real protection is structural (the messages catalog +
  * `LocalizedText` config), this is just the early-warning system.
  */
