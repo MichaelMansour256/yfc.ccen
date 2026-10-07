@@ -6,7 +6,10 @@
 --   The file is idempotent: running it twice is safe.
 --
 -- WHAT IT CREATES
---   Tables      : members, meetings, attendance
+--   Tables      : members (with the optional phone / date_of_birth profile
+--                 columns — NULLable, added idempotently below for databases
+--                 created before the Excel-import feature), meetings,
+--                 attendance
 --   Constraints : members.member_code UNIQUE, members.qr_token UNIQUE,
 --                 attendance UNIQUE(meeting_id, member_id)  ← anti double-scan
 --   Foreign keys: attendance.meeting_id → meetings.id  (ON DELETE CASCADE)
@@ -50,6 +53,11 @@ create table if not exists public.members (
   member_code text        not null unique,
   -- Display name (Arabic or Latin).
   name        text        not null,
+  -- OPTIONAL profile fields (Excel bulk import + member forms). Nullable by
+  -- design: every member that existed before these columns keeps NULL here and
+  -- continues to work unchanged (QR, attendance, history, reports).
+  phone         text      null,
+  date_of_birth date      null,
   -- Cryptographically random token that goes inside the QR code. Never the
   -- name, never the member_code — the token is the only thing the QR carries.
   qr_token    text        not null unique,
@@ -59,8 +67,41 @@ create table if not exists public.members (
   updated_at  timestamptz not null default now(),
   constraint members_member_code_not_blank check (length(btrim(member_code)) > 0),
   constraint members_name_not_blank        check (length(btrim(name)) > 0),
+  constraint members_phone_not_blank       check (phone is null or length(btrim(phone)) > 0),
+  constraint members_date_of_birth_sane    check (
+    date_of_birth is null
+    or (date_of_birth >= date '1900-01-01' and date_of_birth < date '2100-01-01')
+  ),
   constraint members_qr_token_length       check (length(qr_token) >= 16)
 );
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Optional profile columns — idempotent for databases created BEFORE the
+-- Excel-import feature (on a fresh install the CREATE TABLE above already
+-- added them, so everything below no-ops). Same statements as
+-- supabase-members-profile-migration.sql, which can also be applied alone on
+-- an existing deployment.
+-- ─────────────────────────────────────────────────────────────────────────────
+alter table public.members
+  add column if not exists phone         text,
+  add column if not exists date_of_birth date;
+
+do $$
+begin
+  alter table public.members
+    drop constraint if exists members_phone_not_blank;
+  alter table public.members
+    add constraint members_phone_not_blank
+    check (phone is null or length(btrim(phone)) > 0);
+  alter table public.members
+    drop constraint if exists members_date_of_birth_sane;
+  alter table public.members
+    add constraint members_date_of_birth_sane
+    check (date_of_birth is null
+           or (date_of_birth >= date '1900-01-01' and date_of_birth < date '2100-01-01'));
+end $$;
+
+create index if not exists members_phone_idx on public.members (phone) where phone is not null;
 
 create index if not exists idx_members_qr_token    on public.members (qr_token);
 create index if not exists idx_members_active_code on public.members (active, member_code);

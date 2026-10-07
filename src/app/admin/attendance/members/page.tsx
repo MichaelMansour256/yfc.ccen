@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PublicMember } from "@/lib/attendance";
 import { useAttendanceApi } from "@/components/attendance/AdminAuthProvider";
+import MemberImportCard from "@/components/attendance/MemberImportCard";
 import QrDialog from "@/components/attendance/QrDialog";
 import {
   Banner,
@@ -22,6 +23,7 @@ import {
   EmptyState,
   Spinner,
   dangerBtn,
+  formatDateAr,
   inputClass,
   primaryBtn,
   subtleBtn,
@@ -38,10 +40,13 @@ export default function AttendanceMembersPage() {
   const [missingSchema, setMissingSchema] = useState(false);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
+  const [showImport, setShowImport] = useState(false);
 
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState("");
   const [newCode, setNewCode] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newDob, setNewDob] = useState("");
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [qrMember, setQrMember] = useState<PublicMember | null>(null);
@@ -77,8 +82,15 @@ export default function AttendanceMembersPage() {
       return;
     }
     setSaving(true);
+    // Phone and date of birth are optional — the server treats ""/null as
+    // "not provided" and stores NULL.
     const res = await request<PublicMember>("/api/attendance/members", {
-      json: { name: newName, member_code: newCode },
+      json: {
+        name: newName,
+        member_code: newCode,
+        phone: newPhone.trim() || null,
+        date_of_birth: newDob || null,
+      },
     });
     setSaving(false);
     if (!res.ok) {
@@ -86,10 +98,12 @@ export default function AttendanceMembersPage() {
       return;
     }
     setNewName("");
+    setNewPhone("");
+    setNewDob("");
     setShowCreate(false);
     setNotice("✅ تم إنشاء العضو ورمز QR الخاص به");
     void load();
-  }, [request, newName, newCode, load]);
+  }, [request, newName, newCode, newPhone, newDob, load]);
 
   const toggleActive = useCallback(
     async (member: PublicMember) => {
@@ -152,10 +166,25 @@ export default function AttendanceMembersPage() {
   );
 
   const saveEdit = useCallback(
-    async (id: string, name: string, member_code: string) => {
+    async (
+      member: PublicMember,
+      name: string,
+      member_code: string,
+      phone: string,
+      dateOfBirth: string
+    ) => {
+      const json: Record<string, unknown> = { id: member.id, name, member_code };
+      // Profile keys are only sent when they mean something: write a new value,
+      // or clear a value that exists. An unchanged empty field is omitted so
+      // the request stays valid before the profile migration has been applied.
+      if (phone) json.phone = phone;
+      else if (member.phone) json.phone = null;
+      if (dateOfBirth) json.date_of_birth = dateOfBirth;
+      else if (member.date_of_birth) json.date_of_birth = null;
+
       const res = await request<PublicMember>("/api/attendance/members", {
         method: "PATCH",
-        json: { id, name, member_code },
+        json,
       });
       if (!res.ok) {
         setNotice(`⚠️ ${res.error ?? "فشل الحفظ"}`);
@@ -206,6 +235,14 @@ export default function AttendanceMembersPage() {
         title={`👥 الأعضاء (${members.length} — نشط ${activeCount})`}
         actions={
           <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setShowImport((open) => !open)}
+              className={showImport ? primaryBtn : subtleBtn}
+              title="رفع ملف Excel يحتوي قائمة أعضاء والمعاينة قبل الاستيراد"
+            >
+              📥 استيراد من Excel
+            </button>
             <button type="button" onClick={() => void openCreate()} className={primaryBtn}>
               ➕ إضافة عضو
             </button>
@@ -221,24 +258,49 @@ export default function AttendanceMembersPage() {
       >
         {showCreate && (
           <div className="mb-4 rounded-xl bg-blue-dark/40 p-3">
-            <div className="mb-2 flex flex-col gap-2 sm:flex-row">
-              <input
-                value={newCode}
-                onChange={(e) => setNewCode(e.target.value)}
-                placeholder="كود العضو (M001)"
-                className={`${inputClass} sm:max-w-[10rem]`}
-              />
-              <input
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                placeholder="اسم العضو"
-                className={inputClass}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") void create();
-                }}
-              />
+            <div className="grid gap-2 sm:grid-cols-2">
+              <label className="block text-xs text-blue-light/60">
+                اسم العضو <span className="text-amber-200">*</span>
+                <input
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  placeholder="اسم العضو"
+                  className={`${inputClass} mt-1`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") void create();
+                  }}
+                />
+              </label>
+              <label className="block text-xs text-blue-light/60">
+                كود العضو (M001)
+                <input
+                  value={newCode}
+                  onChange={(e) => setNewCode(e.target.value)}
+                  placeholder="كود العضو"
+                  className={`${inputClass} mt-1`}
+                />
+              </label>
+              <label className="block text-xs text-blue-light/60">
+                رقم التليفون <span className="text-blue-light/40">(اختياري)</span>
+                <input
+                  value={newPhone}
+                  onChange={(e) => setNewPhone(e.target.value)}
+                  placeholder="01xxxxxxxxx"
+                  inputMode="tel"
+                  className={`${inputClass} mt-1`}
+                />
+              </label>
+              <label className="block text-xs text-blue-light/60">
+                تاريخ الميلاد <span className="text-blue-light/40">(اختياري)</span>
+                <input
+                  type="date"
+                  value={newDob}
+                  onChange={(e) => setNewDob(e.target.value)}
+                  className={`${inputClass} mt-1 [color-scheme:dark]`}
+                />
+              </label>
             </div>
-            <div className="flex gap-2">
+            <div className="mt-3 flex gap-2">
               <button type="button" onClick={() => void create()} disabled={saving} className={primaryBtn}>
                 {saving ? "جارٍ الإنشاء…" : "إنشاء"}
               </button>
@@ -247,6 +309,7 @@ export default function AttendanceMembersPage() {
               </button>
             </div>
             <p className="mt-2 text-xs text-blue-light/50">
+              الاسم هو الحقل المطلوب فقط — رقم التليفون وتاريخ الميلاد اختياريان.
               يتم توليد رمز QR عشوائي آمن على الخادم عند الإنشاء.
             </p>
           </div>
@@ -256,7 +319,7 @@ export default function AttendanceMembersPage() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="🔍 بحث بالاسم أو الكود…"
+            placeholder="🔍 بحث بالاسم أو الكود أو التليفون…"
             className={inputClass}
           />
           <div className="flex gap-2">
@@ -316,7 +379,9 @@ export default function AttendanceMembersPage() {
                     onToggleActive={() => void toggleActive(member)}
                     onRegenerate={() => void regenerate(member)}
                     onDelete={() => void remove(member)}
-                    onSave={saveEdit}
+                    onSave={(name, codeValue, phone, dob) =>
+                      saveEdit(member, name, codeValue, phone, dob)
+                    }
                   />
                 ))}
                 {visible.length === 0 && (
@@ -331,6 +396,13 @@ export default function AttendanceMembersPage() {
           </div>
         )}
       </Card>
+
+      {showImport && (
+        <div className="mt-4">
+          {/* رفع ملف Excel → معاينة → تأكيد → النتائج (same API permission as ➕ إضافة عضو) */}
+          <MemberImportCard onImported={() => void load()} />
+        </div>
+      )}
     </>
   );
 }
@@ -351,18 +423,36 @@ function MemberRow({
   onToggleActive: () => void;
   onRegenerate: () => void;
   onDelete: () => void;
-  onSave: (id: string, name: string, code: string) => Promise<boolean>;
+  onSave: (name: string, code: string, phone: string, dateOfBirth: string) => Promise<boolean>;
 }) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(member.name);
   const [code, setCode] = useState(member.member_code);
+  const [phone, setPhone] = useState(member.phone ?? "");
+  const [dateOfBirth, setDateOfBirth] = useState(member.date_of_birth ?? "");
   const [busy, setBusy] = useState(false);
 
   return (
     <tr className="border-b border-blue-mid/20 last:border-0">
       <td className="px-2 py-2">
         {editing ? (
-          <input value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
+          <div className="space-y-1">
+            <input value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="رقم التليفون (اختياري)"
+              inputMode="tel"
+              className={inputClass}
+            />
+            <input
+              type="date"
+              value={dateOfBirth}
+              onChange={(e) => setDateOfBirth(e.target.value)}
+              placeholder="تاريخ الميلاد (اختياري)"
+              className={`${inputClass} [color-scheme:dark]`}
+            />
+          </div>
         ) : (
           <Link
             href={`/admin/attendance/members/${member.id}`}
@@ -371,6 +461,16 @@ function MemberRow({
           >
             {member.name}
           </Link>
+        )}
+        {!editing && (member.phone || member.date_of_birth) && (
+          <p className="text-xs text-blue-light/50">
+            {[
+              member.phone ?? "",
+              member.date_of_birth ? formatDateAr(member.date_of_birth) : "",
+            ]
+              .filter(Boolean)
+              .join(" • ")}
+          </p>
         )}
       </td>
       <td className="px-2 py-2 text-blue-light/70">
@@ -405,7 +505,7 @@ function MemberRow({
                 disabled={busy}
                 onClick={async () => {
                   setBusy(true);
-                  const ok = await onSave(member.id, name, code);
+                  const ok = await onSave(name, code, phone, dateOfBirth);
                   setBusy(false);
                   if (ok) setEditing(false);
                 }}
@@ -418,6 +518,8 @@ function MemberRow({
                 onClick={() => {
                   setName(member.name);
                   setCode(member.member_code);
+                  setPhone(member.phone ?? "");
+                  setDateOfBirth(member.date_of_birth ?? "");
                   setEditing(false);
                 }}
                 className={subtleBtn}

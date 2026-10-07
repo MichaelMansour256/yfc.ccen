@@ -75,6 +75,16 @@ export default function MemberHistoryPage() {
         <div>
           <h2 className="text-xl font-bold text-white">{member.name}</h2>
           <p className="text-xs tracking-widest text-blue-light/50">{member.member_code}</p>
+          {(member.phone || member.date_of_birth) && (
+            <p className="mt-1 text-xs text-blue-light/60">
+              {[
+                member.phone ?? "",
+                member.date_of_birth ? formatDateAr(member.date_of_birth) : "",
+              ]
+                .filter(Boolean)
+                .join(" • ")}
+            </p>
+          )}
         </div>
         <div className="flex gap-2">
           <Link href="/admin/attendance/members" className={subtleBtn}>

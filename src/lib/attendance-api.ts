@@ -42,6 +42,13 @@ export function requireStaff(req: Request): NextResponse | null {
 export const MISSING_SCHEMA_CODE = "missing_schema";
 export const MISSING_SCHEMA_MESSAGE =
   "Attendance tables are missing. Run supabase-attendance-migration.sql in the Supabase SQL editor, then retry.";
+/**
+ * Tables exist but a members column does not (PostgREST PGRST204 "Could not
+ * find the '…' column in the schema cache"). Shown for phone/date_of_birth
+ * writes before supabase-members-profile-migration.sql has been applied.
+ */
+export const MISSING_COLUMNS_MESSAGE =
+  "Members table is missing its phone/date_of_birth columns. Run supabase-members-profile-migration.sql in the Supabase SQL editor, then retry.";
 
 export function badRequest(message: string): NextResponse {
   return NextResponse.json({ error: message }, { status: 400 });
@@ -59,9 +66,15 @@ export function databaseError(scope: string, error: unknown): NextResponse {
   const err = error as { code?: string; message?: string } | null;
 
   if (isMissingSchemaError(err)) {
+    // PostgREST reports a missing COLUMN with the same "schema cache" wording
+    // as a missing table — point at the right migration file for each case.
+    const missingColumn = /Could not find the '[^']+' column/i.test(err?.message ?? "");
     console.error(`[attendance:${scope}] schema missing:`, err?.message);
     return NextResponse.json(
-      { error: MISSING_SCHEMA_MESSAGE, code: MISSING_SCHEMA_CODE },
+      {
+        error: missingColumn ? MISSING_COLUMNS_MESSAGE : MISSING_SCHEMA_MESSAGE,
+        code: MISSING_SCHEMA_CODE,
+      },
       { status: 503 }
     );
   }

@@ -214,6 +214,7 @@ re-run.
 | File | Purpose |
 | ---- | ------- |
 | `supabase-attendance-migration.sql` | Members, meetings and attendance tables, plus shared helpers |
+| `supabase-members-profile-migration.sql` | Optional `phone` + `date_of_birth` columns on `members` (Excel bulk import) — idempotent, safe on existing data |
 | `supabase-attendance-lockdown.sql` | Locks attendance so it can only be written through server routes with the service role key |
 | `supabase-content-library.sql` | `content_library` table for studies and resources (public read of published, non-archived rows only) |
 | `supabase-notifications-history.sql` | Notification history and audit log |

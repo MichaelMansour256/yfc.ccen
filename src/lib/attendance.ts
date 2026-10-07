@@ -14,6 +14,7 @@
  *     pulling this module (and the Supabase key) into the browser bundle
  */
 import { randomBytes } from "crypto";
+import { allocateMemberCodes } from "./member-fields";
 import { supabase } from "./supabase";
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -26,6 +27,10 @@ export interface Member {
   id: string;
   member_code: string;
   name: string;
+  /** Optional phone — NULL for members created before the profile migration. */
+  phone: string | null;
+  /** Optional date of birth ("YYYY-MM-DD") — NULL when never provided. */
+  date_of_birth: string | null;
   /** Random secret inside the QR code — stripped before any API response. */
   qr_token: string;
   active: boolean;
@@ -39,10 +44,15 @@ export interface Member {
  */
 export type PublicMember = Omit<Member, "qr_token">;
 
-/** Drop the secret token before sending a member to the browser. */
+/**
+ * Drop the secret token before sending a member to the browser.
+ * phone / date_of_birth are coerced to null so members read before the
+ * supabase-members-profile-migration.sql columns exist still have a stable
+ * shape (the columns are nullable — old rows simply never set them).
+ */
 export function toPublicMember(member: Member): PublicMember {
   const { qr_token: _token, ...rest } = member;
-  return rest;
+  return { ...rest, phone: rest.phone ?? null, date_of_birth: rest.date_of_birth ?? null };
 }
 
 export interface Meeting {
@@ -234,21 +244,33 @@ export async function nextMemberCode(): Promise<string> {
 export interface MemberInput {
   member_code: string;
   name: string;
+  /** Optional — null/undefined means "not provided" (column stays NULL). */
+  phone?: string | null;
+  date_of_birth?: string | null;
 }
 
 /**
  * Create a member with a fresh random QR token.
  * Throws (with a Postgres code) so the route can map 23505 → "duplicate code".
+ *
+ * The optional profile columns are only mentioned in the INSERT when they
+ * actually carry a value: deployments that have not yet applied
+ * supabase-members-profile-migration.sql keep working for name-only members,
+ * and get the clear "run the migration" 503 only when a phone/date is supplied.
  */
 export async function createMember(input: MemberInput): Promise<Member> {
+  const payload: Record<string, unknown> = {
+    member_code: input.member_code.trim(),
+    name: input.name.trim(),
+    qr_token: generateQrToken(),
+    active: true,
+  };
+  if (input.phone) payload.phone = input.phone;
+  if (input.date_of_birth) payload.date_of_birth = input.date_of_birth;
+
   const { data, error } = await supabase
     .from("members")
-    .insert({
-      member_code: input.member_code.trim(),
-      name: input.name.trim(),
-      qr_token: generateQrToken(),
-      active: true,
-    })
+    .insert(payload)
     .select()
     .single();
 
@@ -260,6 +282,9 @@ export interface MemberPatch {
   name?: string;
   member_code?: string;
   active?: boolean;
+  /** string to set, null to CLEAR the column (only sent when explicitly asked). */
+  phone?: string | null;
+  date_of_birth?: string | null;
 }
 
 export async function updateMember(id: string, patch: MemberPatch): Promise<Member> {
@@ -267,6 +292,9 @@ export async function updateMember(id: string, patch: MemberPatch): Promise<Memb
   if (patch.name !== undefined) clean.name = patch.name.trim();
   if (patch.member_code !== undefined) clean.member_code = patch.member_code.trim();
   if (patch.active !== undefined) clean.active = patch.active;
+  // `!== undefined` (not `!== null`) — clearing a field must still write NULL.
+  if (patch.phone !== undefined) clean.phone = patch.phone;
+  if (patch.date_of_birth !== undefined) clean.date_of_birth = patch.date_of_birth;
 
   const { data, error } = await supabase
     .from("members")
@@ -290,6 +318,78 @@ export async function regenerateMemberToken(id: string): Promise<Member> {
 
   if (error) throw error;
   return data as Member;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * BULK IMPORT (Excel) — same member model, same QR token, no special cases
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+export interface BulkMemberInput {
+  name: string;
+  phone: string | null;
+  date_of_birth: string | null;
+  /** Optional code taken from the Excel file; a fresh sequential one is generated when absent. */
+  member_code?: string | null;
+}
+
+/**
+ * Bulk-create members in ONE atomic INSERT round trip (not one request per
+ * member): every row gets a fresh random QR token and either its Excel-supplied
+ * member code or an allocated sequential one (M001, M002, … — never colliding
+ * with existing members or codes used elsewhere in the same batch).
+ *
+ * Because a single multi-row INSERT is a single Postgres transaction, a failure
+ * writes NOTHING. The only realistic failure is 23505 (a code allocated in a
+ * race with a concurrent create) — in that case the codes are rebuilt from a
+ * fresh member list and the insert is retried exactly once.
+ *
+ * Callers must have already filtered duplicate rows (classifyImportRows in
+ * member-fields.ts) — this function does not overwrite anything, it only
+ * creates.
+ */
+export async function importMembers(inputs: BulkMemberInput[]): Promise<number> {
+  if (inputs.length === 0) return 0;
+
+  const buildRows = async (): Promise<Record<string, unknown>[]> => {
+    const existing = await listMembers();
+    const providedCodes = inputs
+      .map((input) => (input.member_code ?? "").trim())
+      .filter(Boolean);
+    const generated = allocateMemberCodes(
+      existing.map((m) => m.member_code),
+      inputs.filter((input) => !(input.member_code ?? "").trim()).length,
+      providedCodes
+    );
+
+    // Profile columns are only mentioned when at least one row carries a value
+    // (see createMember) so name-only imports keep working before
+    // supabase-members-profile-migration.sql is applied.
+    const withProfile = inputs.some((input) => input.phone || input.date_of_birth);
+    let next = 0;
+    return inputs.map((input) => {
+      const row: Record<string, unknown> = {
+        member_code: (input.member_code ?? "").trim() || generated[next++],
+        name: input.name.trim(),
+        qr_token: generateQrToken(),
+        active: true,
+      };
+      if (withProfile) {
+        row.phone = input.phone ?? null;
+        row.date_of_birth = input.date_of_birth ?? null;
+      }
+      return row;
+    });
+  };
+
+  let rows = await buildRows();
+  const { error } = await supabase.from("members").insert(rows);
+  if (!error) return inputs.length;
+  if (error.code !== "23505") throw error;
+
+  rows = await buildRows();
+  const retry = await supabase.from("members").insert(rows);
+  if (retry.error) throw retry.error;
+  return inputs.length;
 }
 
 /**
